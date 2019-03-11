@@ -157,7 +157,38 @@ void induceSAs0_LA(uint_t *SA, int_t *LA,
 }
 /*****************************************************************************/
 
-void induceSAs0_LA_linear(uint_t *SA, int_t *LA, int_t *PREV,
+void induceSAs0_LA_17n(uint_t *SA, int_t *LA, int_t *PREV, int_t *NEXT,
+  int_t *s, uint_t *bkt,
+  uint_t n, unsigned int K, int_t suffix, int cs) {
+  uint_t i, j;
+
+  // find the end of each bucket.
+  getBuckets_k(s, bkt, n, K, true, cs);
+
+  for(i=n-1; i>0; i--){
+
+		j=SA[i];
+
+		LA[j]=NEXT[j]-j;	
+		NEXT[PREV[j]]=NEXT[j];
+		PREV[NEXT[j]]=PREV[j];
+
+    if(SA[i]>0) {
+
+      j=SA[i]-1;
+      if(chr(j)<=chr(j+1) && bkt[chr(j)]<i) {
+        SA[bkt[chr(j)]]=j;
+        bkt[chr(j)]--;
+        if(!suffix) SA[i]=0;
+      }
+    }
+	}
+
+	LA[n-1]=1;
+}
+/*****************************************************************************/
+
+void induceSAs0_LA_13n(uint_t *SA, int_t *LA, int_t *PREV,
   int_t *s, uint_t *bkt,
   uint_t n, unsigned int K, int_t suffix, int cs) {
   uint_t i, j;
@@ -177,13 +208,8 @@ void induceSAs0_LA_linear(uint_t *SA, int_t *LA, int_t *PREV,
 
 		PREV[next]=prev;
 		PREV[prev+1]=next;
-/*
-		LA[j]=NEXT[j]-j;	
-		NEXT[PREV[j]]=NEXT[j];
-		PREV[NEXT[j]]=PREV[j];
-*/
-    if(SA[i]>0) {
 
+    if(SA[i]>0) {
       j=SA[i]-1;
       if(chr(j)<=chr(j+1) && bkt[chr(j)]<i) {
         SA[bkt[chr(j)]]=j;
@@ -191,6 +217,61 @@ void induceSAs0_LA_linear(uint_t *SA, int_t *LA, int_t *PREV,
         if(!suffix) SA[i]=0;
       }
     }
+	}
+
+	LA[n-1]=1;
+}
+/*****************************************************************************/
+
+void induceSAs0_LA_9n(uint_t *SA, int_t *LA, 
+  int_t *s, uint_t *bkt,
+  uint_t n, unsigned int K, int_t suffix, int cs) {
+  uint_t i, j;
+
+  // find the end of each bucket.
+  getBuckets_k(s, bkt, n, K, true, cs);
+
+//  int_t *PREV=LA;
+
+  for(i=n-1; i>1; i--){
+
+		j=SA[i];
+
+		int_t next, prev;
+
+    if(SA[i]>0) {
+
+
+      if(LA[j-1]==0) prev=j-1;
+      else prev=LA[j-1];
+
+		  if(LA[j+1]==0) next=j+1;
+	    else next=LA[j];
+
+		  LA[next-1]=prev;
+		  LA[prev]=next;
+//		LA[j]=NEXT[j]-j;	
+//		NEXT[PREV[j]]=NEXT[j];
+//		PREV[NEXT[j]]=PREV[j];
+
+
+      j=SA[i]-1;
+      if(chr(j)<=chr(j+1) && bkt[chr(j)]<i) { //Inducing S-type
+        SA[bkt[chr(j)]]=j;
+        bkt[chr(j)]--;
+        if(!suffix) SA[i]=0;
+      }
+    }
+    /*
+    else{
+		  if(LA[j+1]==0) next=j+1;
+	    else next=LA[j];
+
+		  LA[next-1]=j;
+		  LA[j]=next;
+    
+    }
+    */
 	}
 
 	LA[n-1]=1;
@@ -739,25 +820,46 @@ return depth;
 
 int_t SACA_K_LA(int_t *s, uint_t *SA, int_t *LA,
   uint_t n, unsigned int K,
-  uint_t m, int cs, int level, int linear) {
+  uint_t m, int cs, int level, 
+  int MODE) {  //MODE: 1 (17n linear), 2 (13n linear), 3 (9n linear), 0 (9n non-linear), 
+
   uint_t i;
   uint_t *bkt=NULL;
 
 	int_t *PREV=NULL;
+	int_t *NEXT=NULL;
 
-	if(linear)
+
+	if(MODE==1)
+		NEXT = (int_t*) malloc(n*sizeof(int_t));
+
+	if(MODE==1 || MODE==2)
 		PREV = (int_t*) malloc(n*sizeof(int_t));
 
   for(i=0;i<n;i++)
 		SA[i]=LA[i]=0;
   
-	if(linear){
+	if(MODE==1){
+		for(i=0;i<n-1;i++){
+				NEXT[i]=i+1;
+		}
+		NEXT[n-1]=n-1;
+	}
+
+	if(MODE==1 || MODE==2){
 		PREV[0]=0;
 		for(i=1;i<n-1;i++){
 				PREV[i]=i-1;
 		}
 		PREV[n-1]=n-2;
 	}
+
+/*
+	if(MODE==3){
+    for(i=0;i<n-1;i++) LA[i]=i+1;
+    LA[n-1]=n-1;
+  }
+*/
 
   #if TIME
     time_t t_time = 0; 
@@ -892,7 +994,13 @@ int_t SACA_K_LA(int_t *s, uint_t *SA, int_t *LA,
   for(i=0; i<n; i++)
 		printf("%" PRIdN "\t", LA[i]);
 	printf("\n\n");
-	if(linear){
+	if(MODE==1){
+		printf("NEXT\n");
+		for(i=0; i<n; i++)
+			printf("%" PRIdN "\t", NEXT[i]+1);
+	  printf("\n\n");
+	}
+	if(MODE==1 || MODE==2){
 		printf("PREV\n");
 		for(i=0; i<n; i++)
 			printf("%" PRIdN "\t", PREV[i]+1);
@@ -904,8 +1012,17 @@ int_t SACA_K_LA(int_t *s, uint_t *SA, int_t *LA,
     t_start(&t_time, &c_time);
   #endif
 
-	if(linear)
-	  induceSAs0_LA_linear(SA, LA, PREV, s, bkt, n, K, true, cs);
+	if(MODE==1)
+	  induceSAs0_LA_17n(SA, LA, PREV, NEXT, s, bkt, n, K, true, cs);
+	else if(MODE==2)
+	  induceSAs0_LA_13n(SA, LA, PREV, s, bkt, n, K, true, cs);
+	else if(MODE==3){
+	  induceSAs0_LA_9n(SA, LA, s, bkt, n, K, true, cs);
+    //overwrite the pointer list with LA
+    for(i=0; i<n; i++) 
+      if(LA[i]>i) LA[i]=LA[i]-i;
+      else  LA[i]=1;
+  }
 	else
 	  induceSAs0_LA(SA, LA, s, bkt, n, K, true, cs);
 
@@ -918,11 +1035,17 @@ int_t SACA_K_LA(int_t *s, uint_t *SA, int_t *LA,
   for(i=0; i<n; i++)
 		printf("%" PRIdN "\t", LA[i]);
 	printf("\n\n");
-	if(linear){
+	if(MODE==1){
+		printf("NEXT\n");
+		for(i=0; i<n; i++)
+			printf("%" PRIdN "\t", NEXT[i]+1);
+	  printf("\n\n");
+	}
+	if(MODE==1 || MODE==2){
 		printf("PREV\n");
-  	for(i=0; i<n; i++)
+		for(i=0; i<n; i++)
 			printf("%" PRIdN "\t", PREV[i]+1);
-  	printf("\n\n");
+	  printf("\n\n");
 	}
   #endif
 
@@ -933,7 +1056,10 @@ int_t SACA_K_LA(int_t *s, uint_t *SA, int_t *LA,
 
   free(bkt);
   
-	if(linear)
+	if(MODE==1)
+		free(NEXT);
+
+	if(MODE==1 || MODE==2)
 		free(PREV);
 
   #if DEPTH
@@ -951,28 +1077,25 @@ int sacak(unsigned char *s, uint_t *SA, uint_t n){
   return SACA_K((int_t*)s, (uint_t*)SA, n, 256, n, sizeof(char), 0);
 }
 
-int sacak_int(int_t *s, uint_t *SA, uint_t n, uint_t k){
-  if((s == NULL) || (SA == NULL) || (n < 0)) return -1;
-  return SACA_K((int_t*)s, (uint_t*)SA, n, k, n, sizeof(int_t), 0);
-}
-
-int sacak_lyndon_9n(unsigned char *s, uint_t *SA, int_t* LA, uint_t n){
+int sacak_lyndon_9n_non_linear(unsigned char *s, uint_t *SA, int_t* LA, uint_t n){
   if((s == NULL) || (SA == NULL) || (LA == NULL) || (n < 0)) return -1;
   return SACA_K_LA((int_t*)s, (uint_t*)SA, (int_t*)LA, n, 256, n, sizeof(char), 0, 0);
 }
 
-int sacak_lyndon_int_12n(int_t *s, uint_t *SA, int_t* LA, uint_t n, uint_t k){
-  if((s == NULL) || (SA == NULL) || (LA == NULL) || (n < 0)) return -1;
-  return SACA_K_LA((int_t*)s, (uint_t*)SA, (int_t*)LA, n, k, n, sizeof(int_t), 0, 0);
-}
-int sacak_lyndon_13n(unsigned char *s, uint_t *SA, int_t* LA, uint_t n){
+int sacak_lyndon_17n_linear(unsigned char *s, uint_t *SA, int_t* LA, uint_t n){
   if((s == NULL) || (SA == NULL) || (LA == NULL) || (n < 0)) return -1;
   return SACA_K_LA((int_t*)s, (uint_t*)SA, (int_t*)LA, n, 256, n, sizeof(char), 0, 1);
 }
 
-int sacak_lyndon_int_16n(int_t *s, uint_t *SA, int_t* LA, uint_t n, uint_t k){
+int sacak_lyndon_13n_linear(unsigned char *s, uint_t *SA, int_t* LA, uint_t n){
   if((s == NULL) || (SA == NULL) || (LA == NULL) || (n < 0)) return -1;
-  return SACA_K_LA((int_t*)s, (uint_t*)SA, (int_t*)LA, n, k, n, sizeof(int_t), 0, 1);
+  return SACA_K_LA((int_t*)s, (uint_t*)SA, (int_t*)LA, n, 256, n, sizeof(char), 0, 2);
 }
+
+int sacak_lyndon_9n_linear(unsigned char *s, uint_t *SA, int_t* LA, uint_t n){
+  if((s == NULL) || (SA == NULL) || (LA == NULL) || (n < 0)) return -1;
+  return SACA_K_LA((int_t*)s, (uint_t*)SA, (int_t*)LA, n, 256, n, sizeof(char), 0, 3);
+}
+
 
 /*****************************************************************************/

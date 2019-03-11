@@ -39,7 +39,7 @@ _Notes:_
 
 5. BWT_INPLACE_LYN: computes LA\[1,n\] during BWT-inplace algorithm by Crochemore et al. \[3\] in **quadratic time**.
 
-6. GSACA_LYN_SA: computes LA\[1,n\] and the suffix array SA\[1,n\] using GSACA \[2\] using **17n bytes**.
+6. GSACA_LYN_SA_17n: computes LA\[1,n\] and the suffix array SA\[1,n\] using GSACA \[2\] using **17n bytes**.
 
 7. SACAK_LYNDON_9n: computes LA\[1,n\] and the suffix array SA\[1,n\] during SACA-K algorithm \[4\] using **9n bytes**.
 
