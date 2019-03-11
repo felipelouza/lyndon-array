@@ -33,11 +33,11 @@ _Notes:_
 
 2. Lyndon_NSV: computes LA\[1,n\] using SA, ISA and NSV arrays.
 
-3. GSACA_LYN:  computes LA\[1,n\] during first phase of GSACA \[2\].
+3. GSACA_LYN:  computes LA\[1,n\] during first phase of GSACA by Baier \[2\].
 
 4. MAX_LYN: computes LA\[1,n\] from scratch in **quadratic time**.
 
-5. BWT_INPLACE_LYN: computes LA\[1,n\] during BWT-inplace algorithm by Crochemore in **quadratic time** \[3\].
+5. BWT_INPLACE_LYN: computes LA\[1,n\] during BWT-inplace algorithm by Crochemore et al. \[3\] in **quadratic time**.
 
 6. GSACA_LYN_SA: computes LA\[1,n\] and the suffix array SA\[1,n\] using GSACA \[2\] using **17n bytes**.
 
@@ -92,4 +92,4 @@ Louza, F. A., & Smyth W. F., Manzini G., Telles, G. P.: Lyndon Array Constructio
 
 ## Thanks
 
-Thanks to Uwe Baier for kindly providing the source code of algorithm Baier-Lyndon: [link](https://github.com/felipelouza/sacak-lyndon/tree/master/external/gsaca_cl).
+Thanks to Uwe Baier for kindly providing the source code of algorithm GSACA_LYN_SA: [link](https://github.com/felipelouza/sacak-lyndon/tree/master/external/gsaca_cl).
