@@ -31,10 +31,10 @@ _Notes:_
 
 | -A | Algorithm              | Output   |   Running time  | Total space           | Auxiliary arrays |
 |:--:|------------------------|----------|:---------------:|-----------------------|:----------------:|
-|  1 | Lyndon_NSV             |    LA    |       O(n)      | 9n bytes + O(n)-words |     SA+Stack     |
+|  1 | Lyndon_NSV             |    LA    |       O(n)      | 9n bytes + O(n)-words |    ISA+Stack     |
 |  2 | GSACA_LYN **\[2\]**    |    LA    |       O(n)      | 17n bytes             |  GSIZE+PREV+ISA  |
 |  3 | MAX_LYN                |    LA    |      O(n^2)     | 5n bytes              |                  |
-|  4 | Lyndon_BWT **\[1\]**   | LA + BWT |       O(n)      | 9n bytes + O(n)-words |     LF+Stack     |
+|  4 | Lyndon_BWT **\[1\]**   |    LA    |       O(n)      | 9n bytes + O(n)-words |     LF+Stack     |
 |  5 | BWT_INPLACE_LYN        | LA + BWT |      O(n^2)     | 5n bytes              |                  |
 |  6 | GSACA_LYN_SA **\[2\]** |  LA + SA |       O(n)      | 17n bytes             |  GSIZE+PREV+ISA  |
 |  7 | SACAK_LYN              |  LA + SA | O(n*avg_lyndon) | 9n bytes              |                  |
