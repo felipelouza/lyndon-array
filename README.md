@@ -29,37 +29,32 @@ _Notes:_
 
 **Algorithms:**
 
-1. Lyndon_BWT: computes LA\[1,n\] during BWT-inversion \[1\].
-
-2. Lyndon_NSV: computes LA\[1,n\] using SA, ISA and NSV arrays.
-
-3. GSACA_LYN:  computes LA\[1,n\] during first phase of GSACA by Baier \[2\].
-
-4. MAX_LYN: computes LA\[1,n\] from scratch in **quadratic time**.
-
-5. BWT_INPLACE_LYN: computes LA\[1,n\] during BWT-inplace algorithm by Crochemore et al. \[3\] in **quadratic time**.
-
-6. GSACA_LYN_SA_17n: computes LA\[1,n\] and the suffix array SA\[1,n\] using GSACA \[2\] using **17n bytes**.
-
-7. SACAK_LYNDON_9n: computes LA\[1,n\] and the suffix array SA\[1,n\] during SACA-K algorithm \[4\] using **9n bytes**.
-
-8. SACAK_LYNDON_13n: computes LA\[1,n\] and the suffix array SA\[1,n\] during SACA-K algorithm \[4\] using **13n bytes**.
-
+| -A | Algorithm              | Output   |   Running time  | Working space | Auxiliary arrays |
+|:--:|------------------------|----------|:---------------:|:-------------:|:----------------:|
+|  1 | Lyndon_NSV             |    LA    |       O(n)      |   O(n)-words  |       Stack      |
+|  2 | GSACA_LYN **\[2\]**    |    LA    |       O(n)      |   12n bytes   |  GSIZE+PREV+ISA  |
+|  3 | MAX_LYN                |    LA    |      O(n^2)     |      O(1)     |                  |
+|  4 | Lyndon_BWT **\[1\]**   | LA + BWT |       O(n)      |   O(n)-words  |       Stack      |
+|  5 | BWT_INPLACE_LYN        | LA + BWT |      O(n^2)     |      O(1)     |                  |
+|  6 | GSACA_LYN_SA **\[2\]** |  LA + SA |       O(n)      |   12n bytes   |  GSIZE+PREV+ISA  |
+|  7 | SACAK_LYN              |  LA + SA | O(n*avg_lyndon) |      O(1)     |                  |
+|  8 | SACAK_LYN_17n          |  LA + SA |       O(n)      |    8n bytes   |     PREV+NEXT    |
+|  9 | SACAK_LYN_13n          |  LA + SA |       O(n)      |    4n bytes   |       PREV       |
+| 10 | SACAK_LYN_9n           |  LA + SA |       O(n)      |      O(1)     |                  |
 
 **Run a test:**
 
 ```c
-./main dataset/input.txt -A 8 -c
+./main dataset/input.txt -A 7 -c -p 10
 ```
 
 **Output:**
 
 ```c
-./main dataset/input.txt -A 7 -c -p 7
 d = 1
 N = 7 bytes
 sizeof(int) = 4 bytes
-## SACAK_LYNDON 9n (non-linear) ##
+## SACAK_LYNDON 9n (linear) ##
 TOTAL:
 CLOCK = 0.000039 TIME = 0.000000
 0.000039

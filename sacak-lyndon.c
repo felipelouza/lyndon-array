@@ -226,41 +226,32 @@ void induceSAs0_LA_13n(int_t *SA, int_t *LA, int_t *PREV,
 void induceSAs0_LA_9n(int_t *SA, int_t *LA, 
   int_t *s, int_t *bkt,
   int_t n, unsigned int K, int_t suffix, int cs) {
-  int_t i;
+  int_t i, j;
 
   // find the end of each bucket.
   getBuckets_k(s, bkt, n, K, true, cs);
 
-//  int_t *PREV=LA;
-
   for(i=n-1; i>0; i--){
 
-/**
-	printf("\n\n");
-	printf("LA (%d)\n",SA[i]);int_t j;
-  for(j=0; j<n; j++)
-		printf("%" PRIdN "\t", LA[j]);
-	printf("\n\n");
-**/
-		int_t j=SA[i];
+    #if DEBUG
+	    printf("\n\n");
+	    printf("LA (%d)\n",SA[i]);
+      for(j=0; j<n; j++)
+	    	printf("%" PRIdN "\t", LA[j]);
+	    printf("\n\n");
+    #endif
+
+		j=SA[i];
 		int_t next, prev;
 
     if(SA[i]>0) {
 
-
       if(LA[j-1]<j) prev=LA[j-1];
       else prev=j-1;
-
 	    next=LA[j];
 
 		  LA[next-1]=prev;
       if(prev>=0) LA[prev]=next;
-
-//      else printf("AAAAHH\n");
-//		LA[j]=NEXT[j]-j;	
-//		NEXT[PREV[j]]=NEXT[j];
-//		PREV[NEXT[j]]=PREV[j];
-
 
       j=SA[i]-1;
       if(chr(j)<=chr(j+1) && bkt[chr(j)]<i) { //Inducing S-type
@@ -270,23 +261,20 @@ void induceSAs0_LA_9n(int_t *SA, int_t *LA,
       }
     }
     else{
-
       prev=j-1;
 	    next=LA[j];
-
 		  LA[next-1]=prev;
-      //LA[prev]=next;
-
-//printf("eeeta\n");
     }
 	}
-/*
-	printf("\n\n");
-	printf("LA (%d)\n",SA[i]);
-  for(j=0; j<n; j++)
-		printf("%" PRIdN "\t", LA[j]);
-	printf("\n\n");
-*/
+
+  #if DEBUG
+	  printf("\n\n");
+	  printf("LA (%d)\n",SA[i]);
+    for(j=0; j<n; j++)
+	  	printf("%" PRIdN "\t", LA[j]);
+	  printf("\n\n");
+  #endif 
+
 	LA[n-1]=n;
 }
 

@@ -99,6 +99,7 @@ char** load_multiple_txt(FILE* f_in, size_t *k, size_t *n) {
 		size_t len = 0; c_buffer[i] = NULL;		
 		ssize_t size = getline(&c_buffer[i], &len, f_in);
 		if (size == -1){
+      free(c_buffer[i]);
 			*k = i;
 			break;		
 		}

@@ -80,7 +80,7 @@ clock_t c_start=0;
   char *c_file=NULL;
 
   size_t  d=0; //number of documents
-  int ALG=1;//Algorithm
+  int ALG=10;//Algorithm
 
   while ((c=getopt(argc, argv, "vthp:d:A:c")) != -1) {
     switch (c)
@@ -167,26 +167,27 @@ clock_t c_start=0;
     for(i=0; i<n; i++) SA[i]=0;
   }
 
+
   switch(ALG){
 
     /****/
-    case 1: printf("## LYNDON_BWT ##\n"); 
-      compute_lyndon_bwt(str, (int_t*)LA, n);
-      break;
-
-    case 2:  printf("## LYNDON_NSV ##\n"); 
+    case 1:  printf("## LYNDON_NSV ##\n"); 
       compute_lyndon_nsv(str, (int_t*)LA, n);
       break;
 
-    case 3:  printf("## GSACA_LYN ##\n"); 
+    case 2:  printf("## GSACA_LYN ##\n"); 
       time_start(&t_start, &c_start);
       gsaca_cl(str, (uint_t*)LA, n);
       printf("TOTAL:\n");
       fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
       break;
 
-    case 4:  printf("## MAX_LYN ##\n"); 
+    case 3:  printf("## MAX_LYN ##\n"); 
       compute_lyndon_max_lyn(str, (int_t*)LA, n);
+      break;
+
+    case 4: printf("## LYNDON_BWT ##\n"); 
+      compute_lyndon_bwt(str, (int_t*)LA, n);
       break;
 
     case 5:  printf("## BWT_INPLACE_LYN ##\n"); 
@@ -201,7 +202,7 @@ clock_t c_start=0;
       fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
       break;
     
-    case 7:  printf("## SACAK_LYNDON 9n (non-linear) ##\n"); 
+    case 7:  printf("## SACAK_LYNDON (non-linear) ##\n"); 
       time_start(&t_start, &c_start);
       sacak_lyndon_9n_non_linear(str, (int_t*)SA, (int_t*)LA, n);
       printf("TOTAL:\n");
@@ -251,7 +252,7 @@ clock_t c_start=0;
     }
     if(SA){
       printf("SA: ");
-      if(!suffix_array_check((unsigned char*)str, (int_t*)SA, n, sizeof(char), 0)) fprintf(stderr,"isNotSorted!!\n");//compares until the separator=1
+      if(!suffix_array_check((unsigned char*)str, (int_t*)SA, n, sizeof(char), 0)) fprintf(stderr,"isNotSorted!!\n");//compares upt to symbol '0'
 			else printf("isSorted!!\n");
     }
   }
