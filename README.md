@@ -42,6 +42,12 @@ _Notes:_
 |  9 | SACAK_LYN_13n          |  LA + SA |       O(n)      | 13n bytes             |       PREV       |
 | 10 | SACAK_LYN_9n           |  LA + SA |       O(n)      | 9n bytes              |                  |
 
+_Notes:_ 
+- BWT_INPLACE_LYN is a modification of the BWT-Inplace algorithm by Crochemore et al. \[3\] to also compute LA. 
+
+- SACAK_LYN is a modification of the suffix sorting algorithm SACAK by Nong \[4\] to also compute LA.
+
+
 **Run a test:**
 
 ```c
