@@ -45,7 +45,7 @@ _Notes:_
 **Run a test:**
 
 ```c
-./main dataset/input.txt -A 7 -c -p 10
+./main dataset/input.txt -c -p 10 -A 10
 ```
 
 **Output:**
