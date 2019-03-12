@@ -29,18 +29,18 @@ _Notes:_
 
 **Algorithms:**
 
-| -A | Algorithm              | Output   |   Running time  | Working space | Auxiliary arrays |
-|:--:|------------------------|----------|:---------------:|:-------------:|:----------------:|
-|  1 | Lyndon_NSV             |    LA    |       O(n)      |   O(n)-words  |       Stack      |
-|  2 | GSACA_LYN **\[2\]**    |    LA    |       O(n)      |   12n bytes   |  GSIZE+PREV+ISA  |
-|  3 | MAX_LYN                |    LA    |      O(n^2)     |      O(1)     |                  |
-|  4 | Lyndon_BWT **\[1\]**   | LA + BWT |       O(n)      |   O(n)-words  |       Stack      |
-|  5 | BWT_INPLACE_LYN        | LA + BWT |      O(n^2)     |      O(1)     |                  |
-|  6 | GSACA_LYN_SA **\[2\]** |  LA + SA |       O(n)      |   12n bytes   |  GSIZE+PREV+ISA  |
-|  7 | SACAK_LYN              |  LA + SA | O(n*avg_lyndon) |      O(1)     |                  |
-|  8 | SACAK_LYN_17n          |  LA + SA |       O(n)      |    8n bytes   |     PREV+NEXT    |
-|  9 | SACAK_LYN_13n          |  LA + SA |       O(n)      |    4n bytes   |       PREV       |
-| 10 | SACAK_LYN_9n           |  LA + SA |       O(n)      |      O(1)     |                  |
+| -A | Algorithm              | Output   |   Running time  | Total space           | Auxiliary arrays |
+|:--:|------------------------|----------|:---------------:|-----------------------|:----------------:|
+|  1 | Lyndon_NSV             |    LA    |       O(n)      | 9n bytes + O(n)-words |     SA+Stack     |
+|  2 | GSACA_LYN **\[2\]**    |    LA    |       O(n)      | 17n bytes             |  GSIZE+PREV+ISA  |
+|  3 | MAX_LYN                |    LA    |      O(n^2)     | 5n bytes              |                  |
+|  4 | Lyndon_BWT **\[1\]**   | LA + BWT |       O(n)      | 9n bytes + O(n)-words |     LF+Stack     |
+|  5 | BWT_INPLACE_LYN        | LA + BWT |      O(n^2)     | 5n bytes              |                  |
+|  6 | GSACA_LYN_SA **\[2\]** |  LA + SA |       O(n)      | 17n bytes             |  GSIZE+PREV+ISA  |
+|  7 | SACAK_LYN              |  LA + SA | O(n*avg_lyndon) | 9n bytes              |                  |
+|  8 | SACAK_LYN_17n          |  LA + SA |       O(n)      | 17n bytes             |     PREV+NEXT    |
+|  9 | SACAK_LYN_13n          |  LA + SA |       O(n)      | 13n bytes             |       PREV       |
+| 10 | SACAK_LYN_9n           |  LA + SA |       O(n)      | 9n bytes              |                  |
 
 **Run a test:**
 
