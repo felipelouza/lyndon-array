@@ -2,7 +2,7 @@
 
 // set only the highest bit as 1, i.e. 1000...
 //const unsigned int EMPTY_k=((unsigned int)1)<<(sizeof(unsigned int)*8-1); 
-const uint_t EMPTY_k=((uint_t)1)<<(sizeof(uint_t)*8-1); 
+const int_t EMPTY_k=((int_t)1)<<(sizeof(int_t)*8-1); 
 
 // get s[i] at a certain level
 #define chr(i) (cs==sizeof(int_t)?((int_t*)s)[i]:((unsigned char *)s)[i])
@@ -36,19 +36,19 @@ double t_stop(time_t t_time, clock_t c_clock){
 /**/
 
 int compare (const void * a, const void * b){
-  if(*(const uint_t *)a < *(const uint_t *)b) return -1;
-  if(*(const uint_t *)a > *(const uint_t *)b) return 1;
+  if(*(const int_t *)a < *(const int_t *)b) return -1;
+  if(*(const int_t *)a > *(const int_t *)b) return 1;
 return 0;
 }
 
-int type_cmp(void *a, void *b){ return (*(uint_t*)a)-(*(uint_t*)b); }
+int type_cmp(void *a, void *b){ return (*(int_t*)a)-(*(int_t*)b); }
 
 /*****************************************************************************/
 
 void getBuckets_k(int_t *s, 
-  uint_t *bkt, uint_t n,
+  int_t *bkt, int_t n,
   unsigned int K, int end, int cs) { 
-  uint_t i, sum=0;
+  int_t i, sum=0;
   
   // clear all buckets .
   for(i=0; i<K; i++) bkt[i]=0; 
@@ -62,10 +62,10 @@ void getBuckets_k(int_t *s,
   }
 }
 
-void putSuffix0(uint_t *SA, 
-  int_t *s, uint_t *bkt, 
-  uint_t n, unsigned int K, int_t n1, int cs) {
-  uint_t i, j;
+void putSuffix0(int_t *SA, 
+  int_t *s, int_t *bkt, 
+  int_t n, unsigned int K, int_t n1, int cs) {
+  int_t i, j;
 
   // find the end of each bucket.
   getBuckets_k(s, bkt, n, K, true, cs);
@@ -80,10 +80,10 @@ void putSuffix0(uint_t *SA,
 
 /*****************************************************************************/
 
-void induceSAl0(uint_t *SA,
-  int_t *s, uint_t *bkt,
-  uint_t n, unsigned int K, int_t suffix, int cs) {
-  uint_t i, j;
+void induceSAl0(int_t *SA,
+  int_t *s, int_t *bkt,
+  int_t n, unsigned int K, int_t suffix, int cs) {
+  int_t i, j;
 
   // find the head of each bucket.
   getBuckets_k(s, bkt, n, K, false, cs);
@@ -102,10 +102,10 @@ void induceSAl0(uint_t *SA,
 
 /*****************************************************************************/
 
-void induceSAs0(uint_t *SA,
-  int_t *s, uint_t *bkt,
-  uint_t n, unsigned int K, int_t suffix, int cs) {
-  uint_t i, j;
+void induceSAs0(int_t *SA,
+  int_t *s, int_t *bkt,
+  int_t n, unsigned int K, int_t suffix, int cs) {
+  int_t i, j;
 
   // find the end of each bucket.
   getBuckets_k(s, bkt, n, K, true, cs);
@@ -123,10 +123,10 @@ void induceSAs0(uint_t *SA,
 
 /*****************************************************************************/
 
-void induceSAs0_LA(uint_t *SA, int_t *LA,
-  int_t *s, uint_t *bkt,
-  uint_t n, unsigned int K, int_t suffix, int cs) {
-  uint_t i, j;
+void induceSAs0_LA(int_t *SA, int_t *LA,
+  int_t *s, int_t *bkt,
+  int_t n, unsigned int K, int_t suffix, int cs) {
+  int_t i, j;
 
   // find the end of each bucket.
   getBuckets_k(s, bkt, n, K, true, cs);
@@ -135,7 +135,7 @@ void induceSAs0_LA(uint_t *SA, int_t *LA,
 
 		j=SA[i];
 		if(!LA[j]){// LA[j]=1;
-				uint_t l=j+1;
+				int_t l=j+1;
 				//while(LA[l++]!=0);
 				//LA[j]=l-j-1;
 				while(LA[l]!=0) l+=LA[l];//jumping
@@ -157,10 +157,10 @@ void induceSAs0_LA(uint_t *SA, int_t *LA,
 }
 /*****************************************************************************/
 
-void induceSAs0_LA_17n(uint_t *SA, int_t *LA, int_t *PREV, int_t *NEXT,
-  int_t *s, uint_t *bkt,
-  uint_t n, unsigned int K, int_t suffix, int cs) {
-  uint_t i, j;
+void induceSAs0_LA_17n(int_t *SA, int_t *LA, int_t *PREV, int_t *NEXT,
+  int_t *s, int_t *bkt,
+  int_t n, unsigned int K, int_t suffix, int cs) {
+  int_t i, j;
 
   // find the end of each bucket.
   getBuckets_k(s, bkt, n, K, true, cs);
@@ -188,10 +188,10 @@ void induceSAs0_LA_17n(uint_t *SA, int_t *LA, int_t *PREV, int_t *NEXT,
 }
 /*****************************************************************************/
 
-void induceSAs0_LA_13n(uint_t *SA, int_t *LA, int_t *PREV,
-  int_t *s, uint_t *bkt,
-  uint_t n, unsigned int K, int_t suffix, int cs) {
-  uint_t i, j;
+void induceSAs0_LA_13n(int_t *SA, int_t *LA, int_t *PREV,
+  int_t *s, int_t *bkt,
+  int_t n, unsigned int K, int_t suffix, int cs) {
+  int_t i, j;
 
   // find the end of each bucket.
   getBuckets_k(s, bkt, n, K, true, cs);
@@ -223,33 +223,40 @@ void induceSAs0_LA_13n(uint_t *SA, int_t *LA, int_t *PREV,
 }
 /*****************************************************************************/
 
-void induceSAs0_LA_9n(uint_t *SA, int_t *LA, 
-  int_t *s, uint_t *bkt,
-  uint_t n, unsigned int K, int_t suffix, int cs) {
-  uint_t i, j;
+void induceSAs0_LA_9n(int_t *SA, int_t *LA, 
+  int_t *s, int_t *bkt,
+  int_t n, unsigned int K, int_t suffix, int cs) {
+  int_t i;
 
   // find the end of each bucket.
   getBuckets_k(s, bkt, n, K, true, cs);
 
 //  int_t *PREV=LA;
 
-  for(i=n-1; i>1; i--){
+  for(i=n-1; i>0; i--){
 
-		j=SA[i];
-
+/**
+	printf("\n\n");
+	printf("LA (%d)\n",SA[i]);int_t j;
+  for(j=0; j<n; j++)
+		printf("%" PRIdN "\t", LA[j]);
+	printf("\n\n");
+**/
+		int_t j=SA[i];
 		int_t next, prev;
 
     if(SA[i]>0) {
 
 
-      if(LA[j-1]==0) prev=j-1;
-      else prev=LA[j-1];
+      if(LA[j-1]<j) prev=LA[j-1];
+      else prev=j-1;
 
-		  if(LA[j+1]==0) next=j+1;
-	    else next=LA[j];
+	    next=LA[j];
 
 		  LA[next-1]=prev;
-		  LA[prev]=next;
+      if(prev>=0) LA[prev]=next;
+
+//      else printf("AAAAHH\n");
 //		LA[j]=NEXT[j]-j;	
 //		NEXT[PREV[j]]=NEXT[j];
 //		PREV[NEXT[j]]=PREV[j];
@@ -262,27 +269,33 @@ void induceSAs0_LA_9n(uint_t *SA, int_t *LA,
         if(!suffix) SA[i]=0;
       }
     }
-    /*
     else{
-		  if(LA[j+1]==0) next=j+1;
-	    else next=LA[j];
 
-		  LA[next-1]=j;
-		  LA[j]=next;
-    
+      prev=j-1;
+	    next=LA[j];
+
+		  LA[next-1]=prev;
+      //LA[prev]=next;
+
+//printf("eeeta\n");
     }
-    */
 	}
-
-	LA[n-1]=1;
+/*
+	printf("\n\n");
+	printf("LA (%d)\n",SA[i]);
+  for(j=0; j<n; j++)
+		printf("%" PRIdN "\t", LA[j]);
+	printf("\n\n");
+*/
+	LA[n-1]=n;
 }
 
 /*****************************************************************************/
 
-void putSubstr0(uint_t *SA,
-  int_t *s, uint_t *bkt,
-  uint_t n, unsigned int K, int cs) {
-  uint_t i, cur_t, succ_t;
+void putSubstr0(int_t *SA,
+  int_t *s, int_t *bkt,
+  int_t n, unsigned int K, int cs) {
+  int_t i, cur_t, succ_t;
 
   // find the end of each bucket.
   getBuckets_k(s, bkt, n, K, true, cs);
@@ -537,11 +550,11 @@ void putSubstr1(int_t *SA, int_t *s, int_t n, int cs) {
   SA[0]=n-1;
 }
 
-uint_t getLengthOfLMS(int_t *s, 
-  uint_t n, int level, uint_t x, int cs) {
+int_t getLengthOfLMS(int_t *s, 
+  int_t n, int level, int_t x, int cs) {
   if(x==n-1) return 1;  
   
-  uint_t dist=0, i=1;  
+  int_t dist=0, i=1;  
   while(1) {
     if(chr(x+i)<chr(x+i-1)) break;
     i++;
@@ -557,22 +570,22 @@ uint_t getLengthOfLMS(int_t *s,
 
 /*****************************************************************************/
 
-uint_t nameSubstr(uint_t *SA, 
-  int_t *s, uint_t *s1, uint_t n, 
-  uint_t m, uint_t n1, int level, int cs) {
-  uint_t i, j, cur_t, succ_t;
+int_t nameSubstr(int_t *SA, 
+  int_t *s, int_t *s1, int_t n, 
+  int_t m, int_t n1, int level, int cs) {
+  int_t i, j, cur_t, succ_t;
 
   // init the name array buffer
   for(i=n1; i<n; i++) SA[i]=EMPTY_k;
 
   // scan to compute the interim s1
-  uint_t name=0, name_ctr=0;
-  uint_t pre_pos=n-1, pre_len=0;
+  int_t name=0, name_ctr=0;
+  int_t pre_pos=n-1, pre_len=0;
   for(i=0; i<n1; i++) {
     int diff=false;
-    uint_t len, pos=SA[i];
+    int_t len, pos=SA[i];
 
-    uint_t d;
+    int_t d;
     len=getLengthOfLMS(s, n, level, pos, cs);
     if(len!=pre_len) diff=true;
     else
@@ -617,11 +630,11 @@ uint_t nameSubstr(uint_t *SA,
 /*****************************************************************************/
 // find lms position and stores it on s1 (in text order)
 
-void getSAlms(uint_t *SA, 
+void getSAlms(int_t *SA, 
   int_t *s, 
-  uint_t *s1, uint_t n, 
-  uint_t n1, int level, int cs) {
-  uint_t i, j, cur_t, succ_t;
+  int_t *s1, int_t n, 
+  int_t n1, int level, int cs) {
+  int_t i, j, cur_t, succ_t;
 
   j=n1-1; s1[j--]=n-1;
   succ_t=0; // s[n-2] must be L-type
@@ -635,11 +648,11 @@ void getSAlms(uint_t *SA,
 
 /*****************************************************************************/
 
-int_t SACA_K(int_t *s, uint_t *SA,
-  uint_t n, unsigned int K,
-  uint_t m, int cs, int level) {
-  uint_t i;
-  uint_t *bkt=NULL;
+int_t SACA_K(int_t *s, int_t *SA,
+  int_t n, unsigned int K,
+  int_t m, int cs, int level) {
+  int_t i;
+  int_t *bkt=NULL;
 
   #if TIME
     time_t t_time = 0; 
@@ -654,7 +667,7 @@ int_t SACA_K(int_t *s, uint_t *SA,
   // stage 1: reduce the problem by at least 1/2.
   if(level==0) {
 
-    bkt=(uint_t *)malloc(sizeof(int_t)*K);
+    bkt=(int_t *)malloc(sizeof(int_t)*K);
     putSubstr0(SA, s, bkt, n, K, cs);
 
     #if DEBUG
@@ -693,7 +706,7 @@ int_t SACA_K(int_t *s, uint_t *SA,
   // compact all the sorted substrings into
   //   the first n1 items of SA.
   // 2*n1 must be not larger than n.
-  uint_t n1=0;
+  int_t n1=0;
   for(i=0; i<n; i++) 
     if((!level&&SA[i]>0) || (level&&((int_t *)SA)[i]>0))
       SA[n1++]=SA[i];
@@ -707,8 +720,8 @@ int_t SACA_K(int_t *s, uint_t *SA,
   }
   #endif
 
-  uint_t *SA1=SA, *s1=SA+m-n1;
-  uint_t name_ctr;
+  int_t *SA1=SA, *s1=SA+m-n1;
+  int_t name_ctr;
   name_ctr=nameSubstr(SA,s,s1,n,m,n1,level,cs);
 
   // stage 2: solve the reduced problem.
@@ -818,13 +831,13 @@ return depth;
 }
 /*****************************************************************************/
 
-int_t SACA_K_LA(int_t *s, uint_t *SA, int_t *LA,
-  uint_t n, unsigned int K,
-  uint_t m, int cs, int level, 
+int_t SACA_K_LA(int_t *s, int_t *SA, int_t *LA,
+  int_t n, unsigned int K,
+  int_t m, int cs, int level, 
   int MODE) {  //MODE: 1 (17n linear), 2 (13n linear), 3 (9n linear), 0 (9n non-linear), 
 
-  uint_t i;
-  uint_t *bkt=NULL;
+  int_t i;
+  int_t *bkt=NULL;
 
 	int_t *PREV=NULL;
 	int_t *NEXT=NULL;
@@ -854,12 +867,10 @@ int_t SACA_K_LA(int_t *s, uint_t *SA, int_t *LA,
 		PREV[n-1]=n-2;
 	}
 
-/*
 	if(MODE==3){
-    for(i=0;i<n-1;i++) LA[i]=i+1;
-    LA[n-1]=n-1;
+    for(i=0;i<n;i++) LA[i]=i+1; //LA[i]=next_i
+   // LA[n-1]=n-1;
   }
-*/
 
   #if TIME
     time_t t_time = 0; 
@@ -872,7 +883,7 @@ int_t SACA_K_LA(int_t *s, uint_t *SA, int_t *LA,
   #endif
 
   // stage 1: reduce the problem by at least 1/2.
-  bkt=(uint_t *)malloc(sizeof(int_t)*K);
+  bkt=(int_t *)malloc(sizeof(int_t)*K);
   putSubstr0(SA, s, bkt, n, K, cs);
 
   #if DEBUG
@@ -905,7 +916,7 @@ int_t SACA_K_LA(int_t *s, uint_t *SA, int_t *LA,
   // compact all the sorted substrings into
   //   the first n1 items of SA.
   // 2*n1 must be not larger than n.
-  uint_t n1=0;
+  int_t n1=0;
   for(i=0; i<n; i++) 
     if((!level&&SA[i]>0) || (level&&((int_t *)SA)[i]>0))
       SA[n1++]=SA[i];
@@ -917,8 +928,8 @@ int_t SACA_K_LA(int_t *s, uint_t *SA, int_t *LA,
   printf("\n");
   #endif
 
-  uint_t *SA1=SA, *s1=SA+m-n1;
-  uint_t name_ctr;
+  int_t *SA1=SA, *s1=SA+m-n1;
+  int_t name_ctr;
   name_ctr=nameSubstr(SA,s,s1,n,m,n1,level,cs);
 
   // stage 2: solve the reduced problem.
@@ -1019,9 +1030,11 @@ int_t SACA_K_LA(int_t *s, uint_t *SA, int_t *LA,
 	else if(MODE==3){
 	  induceSAs0_LA_9n(SA, LA, s, bkt, n, K, true, cs);
     //overwrite the pointer list with LA
-    for(i=0; i<n; i++) 
-      if(LA[i]>i) LA[i]=LA[i]-i;
-      else  LA[i]=1;
+    int_t j;
+    for(j=0; j<n; j++){ 
+      if(LA[j]<j) LA[j]=1;
+      else LA[j]=LA[j]-j;
+    }
   }
 	else
 	  induceSAs0_LA(SA, LA, s, bkt, n, K, true, cs);
@@ -1072,29 +1085,29 @@ return depth;
 
 /*****************************************************************************/
 
-int sacak(unsigned char *s, uint_t *SA, uint_t n){
+int sacak(unsigned char *s, int_t *SA, int_t n){
   if((s == NULL) || (SA == NULL) || (n < 0)) return -1;
-  return SACA_K((int_t*)s, (uint_t*)SA, n, 256, n, sizeof(char), 0);
+  return SACA_K((int_t*)s, (int_t*)SA, n, 256, n, sizeof(char), 0);
 }
 
-int sacak_lyndon_9n_non_linear(unsigned char *s, uint_t *SA, int_t* LA, uint_t n){
+int sacak_lyndon_9n_non_linear(unsigned char *s, int_t *SA, int_t* LA, int_t n){
   if((s == NULL) || (SA == NULL) || (LA == NULL) || (n < 0)) return -1;
-  return SACA_K_LA((int_t*)s, (uint_t*)SA, (int_t*)LA, n, 256, n, sizeof(char), 0, 0);
+  return SACA_K_LA((int_t*)s, (int_t*)SA, (int_t*)LA, n, 256, n, sizeof(char), 0, 0);
 }
 
-int sacak_lyndon_17n_linear(unsigned char *s, uint_t *SA, int_t* LA, uint_t n){
+int sacak_lyndon_17n_linear(unsigned char *s, int_t *SA, int_t* LA, int_t n){
   if((s == NULL) || (SA == NULL) || (LA == NULL) || (n < 0)) return -1;
-  return SACA_K_LA((int_t*)s, (uint_t*)SA, (int_t*)LA, n, 256, n, sizeof(char), 0, 1);
+  return SACA_K_LA((int_t*)s, (int_t*)SA, (int_t*)LA, n, 256, n, sizeof(char), 0, 1);
 }
 
-int sacak_lyndon_13n_linear(unsigned char *s, uint_t *SA, int_t* LA, uint_t n){
+int sacak_lyndon_13n_linear(unsigned char *s, int_t *SA, int_t* LA, int_t n){
   if((s == NULL) || (SA == NULL) || (LA == NULL) || (n < 0)) return -1;
-  return SACA_K_LA((int_t*)s, (uint_t*)SA, (int_t*)LA, n, 256, n, sizeof(char), 0, 2);
+  return SACA_K_LA((int_t*)s, (int_t*)SA, (int_t*)LA, n, 256, n, sizeof(char), 0, 2);
 }
 
-int sacak_lyndon_9n_linear(unsigned char *s, uint_t *SA, int_t* LA, uint_t n){
+int sacak_lyndon_9n_linear(unsigned char *s, int_t *SA, int_t* LA, int_t n){
   if((s == NULL) || (SA == NULL) || (LA == NULL) || (n < 0)) return -1;
-  return SACA_K_LA((int_t*)s, (uint_t*)SA, (int_t*)LA, n, 256, n, sizeof(char), 0, 3);
+  return SACA_K_LA((int_t*)s, (int_t*)SA, (int_t*)LA, n, 256, n, sizeof(char), 0, 3);
 }
 
 

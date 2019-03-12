@@ -53,15 +53,15 @@
  *  @param n	string length
  *  @return -1 if an error occured, otherwise the depth of the recursive calls.
  */
-int sacak(unsigned char *s, uint_t *SA, uint_t n);
+int sacak(unsigned char *s, int_t *SA, int_t n);
 
 /** @brief computes the suffix and LA arrays of string s[0..n-1]
  *  @param k	alphabet size
  */
-int sacak_lyndon_9n_non_linear(unsigned char *s, uint_t *SA, int_t* LA, uint_t n);
+int sacak_lyndon_9n_non_linear(unsigned char *s, int_t *SA, int_t* LA, int_t n);
 
-int sacak_lyndon_17n_linear(unsigned char *s, uint_t *SA, int_t* LA, uint_t n);
-int sacak_lyndon_13n_linear(unsigned char *s, uint_t *SA, int_t* LA, uint_t n);
-int sacak_lyndon_9n_linear(unsigned char *s, uint_t *SA, int_t* LA, uint_t n);
+int sacak_lyndon_17n_linear(unsigned char *s, int_t *SA, int_t* LA, int_t n);
+int sacak_lyndon_13n_linear(unsigned char *s, int_t *SA, int_t* LA, int_t n);
+int sacak_lyndon_9n_linear(unsigned char *s, int_t *SA, int_t* LA, int_t n);
 
 #endif

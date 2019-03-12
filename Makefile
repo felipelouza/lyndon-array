@@ -1,17 +1,12 @@
 CC = gcc
 CFLAGS += -Wall 
-#CFLAGS += -g -O0
-CFLAGS += -D_FILE_OFFSET_BITS=64 -m64 -O3 -fomit-frame-pointer -Wno-char-subscripts 
+CFLAGS += -g -O0
+#CFLAGS += -D_FILE_OFFSET_BITS=64 -m64 -O3 -fomit-frame-pointer -Wno-char-subscripts 
 
 LFLAGS = -lm -lrt -ldl
 
-DIR = dataset/
-INPUT = input.100.txt
-
-K	= 1
-MODE 	= 1
-CHECK	= 1
-OUTPUT	= 0
+INPUT = dataset/input.100.txt
+ALG = 10
 
 LIBOBJ = \
 	lib/utils.o\
@@ -46,7 +41,7 @@ compile: main.c ${LIBOBJ}
 	$(CC) -o main main.c ${LIBOBJ} $(CFLAGS) $(LFLAGS) 
 
 run:
-	./main $(DIR) $(INPUT) $(K) $(MODE) $(CHECK)
+	./main $(INPUT) -A $(ALG)
 
 valgrind:
-	valgrind --tool=memcheck --leak-check=full --track-origins=yes ./main $(DIR) $(INPUT) $(K) $(MODE) $(CHECK)
+	valgrind --tool=memcheck --leak-check=full --track-origins=yes ./main $(INPUT) -A $(ALG)

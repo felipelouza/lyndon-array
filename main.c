@@ -39,7 +39,7 @@ unsigned char* cat_char(unsigned char** R, size_t d, size_t *n){
     for(j=0; j<m; j++){
       if(R[i][j]<255) str[l++] = R[i][j]+1;
     }
-    //str[l++] = 1; //add 1 as separator
+    str[l++] = 1; //add 1 as separator
   }
 
   str[l++]=0;
@@ -138,6 +138,7 @@ clock_t c_start=0;
   printf("N = %zu bytes\n", n);
   printf("sizeof(int) = %zu bytes\n", sizeof(int_t));
 
+
   #if DEBUG
     printf("R:\n");
     for(i=0; i<d; i++)
@@ -156,22 +157,25 @@ clock_t c_start=0;
   }
 
   //sorted array
-  uint_t *LA = (uint_t*) malloc(n*sizeof(int_t));
+  int_t *LA = (int_t*) malloc(n*sizeof(int_t));
   for(i=0; i<n; i++) LA[i]=0;
 
-  uint_t *SA = NULL;
-  if(ALG>=6) //also computes SA[1,n]
-      SA = (uint_t*) malloc(n*sizeof(int_t));
+
+  int_t *SA = NULL;
+  if(ALG>=6){ //also computes SA[1,n]
+    SA = (int_t*) malloc(n*sizeof(int_t));
+    for(i=0; i<n; i++) SA[i]=0;
+  }
 
   switch(ALG){
 
     /****/
     case 1: printf("## LYNDON_BWT ##\n"); 
-      compute_lyndon_bwt(str, (uint_t*)LA, n);
+      compute_lyndon_bwt(str, (int_t*)LA, n);
       break;
 
     case 2:  printf("## LYNDON_NSV ##\n"); 
-      compute_lyndon_nsv(str, (uint_t*)LA, n);
+      compute_lyndon_nsv(str, (int_t*)LA, n);
       break;
 
     case 3:  printf("## GSACA_LYN ##\n"); 
@@ -182,11 +186,11 @@ clock_t c_start=0;
       break;
 
     case 4:  printf("## MAX_LYN ##\n"); 
-      compute_lyndon_max_lyn(str, (uint_t*)LA, n);
+      compute_lyndon_max_lyn(str, (int_t*)LA, n);
       break;
 
     case 5:  printf("## BWT_INPLACE_LYN ##\n"); 
-      bwt_lyndon_inplace((char*)str, (uint_t*)LA, n);
+      bwt_lyndon_inplace((char*)str, (int_t*)LA, n);
       break;
 
     /****/
@@ -199,28 +203,28 @@ clock_t c_start=0;
     
     case 7:  printf("## SACAK_LYNDON 9n (non-linear) ##\n"); 
       time_start(&t_start, &c_start);
-      sacak_lyndon_9n_non_linear(str, (uint_t*)SA, (int_t*)LA, n);
+      sacak_lyndon_9n_non_linear(str, (int_t*)SA, (int_t*)LA, n);
       printf("TOTAL:\n");
       fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
       break;
 
     case 8:  printf("## SACAK_LYNDON 17n (linear) ##\n"); 
       time_start(&t_start, &c_start);
-      sacak_lyndon_17n_linear(str, (uint_t*)SA, (int_t*)LA, n);
+      sacak_lyndon_17n_linear(str, (int_t*)SA, (int_t*)LA, n);
       printf("TOTAL:\n");
       fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
       break;
     
     case 9:  printf("## SACAK_LYNDON 13n (linear) ##\n"); 
       time_start(&t_start, &c_start);
-      sacak_lyndon_13n_linear(str, (uint_t*)SA, (int_t*)LA, n);
+      sacak_lyndon_13n_linear(str, (int_t*)SA, (int_t*)LA, n);
       printf("TOTAL:\n");
       fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
       break;
     
     case 10:  printf("## SACAK_LYNDON 9n (linear) ##\n"); 
       time_start(&t_start, &c_start);
-      sacak_lyndon_9n_linear(str, (uint_t*)SA, (int_t*)LA, n);
+      sacak_lyndon_9n_linear(str, (int_t*)SA, (int_t*)LA, n);
       printf("TOTAL:\n");
       fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
       break;

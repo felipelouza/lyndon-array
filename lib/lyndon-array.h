@@ -43,7 +43,7 @@
  *  @param n	string length
  *  @return -1 if an error occured, otherwise the depth of the recursive calls.
  */
-int compute_lyndon_bwt(unsigned char *s, uint_t *A, uint_t n);
+int compute_lyndon_bwt(unsigned char *s, int_t *A, int_t n);
 
 /** @brief computes the lyndon array of string s[0, n-1] from SA, ISA and NSV 
  *
@@ -52,7 +52,7 @@ int compute_lyndon_bwt(unsigned char *s, uint_t *A, uint_t n);
  *  @param n	string length
  *  @return -1 if an error occured, otherwise the depth of the recursive calls.
  */
-int compute_lyndon_nsv(unsigned char *s, uint_t *A, uint_t n);
+int compute_lyndon_nsv(unsigned char *s, int_t *A, int_t n);
 
 /** @brief computes the lyndon array of string s[0, n-1] 
  *
@@ -61,7 +61,7 @@ int compute_lyndon_nsv(unsigned char *s, uint_t *A, uint_t n);
  *  @param n	string length
  *  @return -1 if an error occured, otherwise the depth of the recursive calls.
  */
-int compute_lyndon_max_lyn(unsigned char *s, uint_t *A, uint_t n);
+int compute_lyndon_max_lyn(unsigned char *s, int_t *A, int_t n);
 
 
 /** @brief checks if A[0, n-1] is the lyndon array of string s[0, n-1]
@@ -72,6 +72,6 @@ int compute_lyndon_max_lyn(unsigned char *s, uint_t *A, uint_t n);
  *  @param print 1 = print s, SA, BWT, LA and suffixes
  *  @return -1 if an error occured, otherwise the depth of the recursive calls.
  */
-int lyndon_check(unsigned char *s, uint_t *A, uint_t n, int print);
+int lyndon_check(unsigned char *s, int_t *A, int_t n, int print);
 
 #endif

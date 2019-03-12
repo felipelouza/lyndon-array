@@ -34,22 +34,22 @@
 	#define COMPUTE_BWT 1
 #endif
 
-#define STACK_SIZE 10240/(sizeof(uint_t)*2) //10KB
+#define STACK_SIZE 10240/(sizeof(int_t)*2) //10KB
 
 /**********************************************************************/
 
 typedef struct _pair{
-        uint_t i;
-        uint_t j;
+        int_t i;
+        int_t j;
 } s_pair;
 
 typedef struct{
         s_pair *array;
-        uint_t top;
-        uint_t size;
+        int_t top;
+        int_t size;
 } stack;
 
-int stack_init(stack *S, uint_t size){
+int stack_init(stack *S, int_t size){
 
 	S->array = (s_pair*) malloc(size*sizeof(s_pair));	
 	if(S->array==NULL) return 0;
@@ -60,7 +60,7 @@ int stack_init(stack *S, uint_t size){
 return 0;
 }
 
-void stack_push(stack *S, uint_t i, uint_t j){
+void stack_push(stack *S, int_t i, int_t j){
 
 	if(S->top==S->size){
 		S->size += STACK_SIZE;
@@ -88,7 +88,7 @@ void stack_pop(stack *S){
 
 void stack_print(stack *S){
 
-	uint_t i;
+	int_t i;
 
 	for(i=S->top-1; i>0; i--)
 		printf("%d\t(%d, %d)\n", i, S->array[i].i, S->array[i].j);
@@ -113,7 +113,7 @@ double tstop(time_t t_time, clock_t c_clock){
 
 /**********************************************************************/
 
-int compute_lyndon_bwt_10n(unsigned char *s, uint_t *A, uint_t n){
+int compute_lyndon_bwt_10n(unsigned char *s, int_t *A, int_t n){
 
 int_t i;
 
@@ -130,9 +130,9 @@ int_t i;
 	
 	// 1. sort
 	#if PERMUTED  	//1. uses 1 array for SA -> LF -> pLA
-		uint_t *SA = A;
+		int_t *SA = A;
 	#else		//0. uses 2 arrays, SA -> LF, and LA
-		uint_t *SA = (uint_t*) malloc(n*sizeof(uint_t));
+		int_t *SA = (int_t*) malloc(n*sizeof(int_t));
 	#endif
 
 	sacak(s, SA, n);
@@ -156,14 +156,14 @@ int_t i;
 	#endif
 
 	//3. compute LF-array (in the space of SA[0,n-1])
-	uint_t *LF = SA;
-	uint_t *C = (uint_t*) malloc(SIGMA*sizeof(uint_t));
+	int_t *LF = SA;
+	int_t *C = (int_t*) malloc(SIGMA*sizeof(int_t));
 
 	//counter
 	for(i=0; i<SIGMA; i++) C[i]=0;
 	for(i=0; i<n; i++) C[bwt[i]]++;
 
-	uint_t sum=0;
+	int_t sum=0;
 	for(i=0; i<SIGMA; i++){
 		sum+=C[i]; C[i]=sum-C[i];
 	}
@@ -188,16 +188,16 @@ int_t i;
 		printf("step\tpos\tT^{rev}\tLyndon\n");
 	#endif
 
-	uint_t *LA = A;
+	int_t *LA = A;
 
-	uint_t pos = 0;
-	uint_t step = 1;//(n-1)-i
+	int_t pos = 0;
+	int_t step = 1;//(n-1)-i
 
 	for(i=n-1; i >= 0; i--){	
 
 		while(stack_top(&S).i > pos) stack_pop(&S);
 
-		uint_t next = LF[pos];
+		int_t next = LF[pos];
 
 		#if PERMUTED
 			LA[pos] = step-stack_top(&S).j;
@@ -236,13 +236,13 @@ return 0;
 
 /**********************************************************************/
 
-unsigned char find_symbol(uint_t pos, uint_t* F, unsigned char* Alpha, uint_t n){
+unsigned char find_symbol(int_t pos, int_t* F, unsigned char* Alpha, int_t n){
 
 	//binary search
-	uint_t a=0;
-	uint_t b=n-2;
+	int_t a=0;
+	int_t b=n-2;
 
-	uint_t i=0;
+	int_t i=0;
 	while(a<=b){
 		i=a+(b-a)/2;
 		if(pos>=F[i] && pos<F[i+1]){
@@ -255,7 +255,7 @@ unsigned char find_symbol(uint_t pos, uint_t* F, unsigned char* Alpha, uint_t n)
 	return 0;
 }
 
-int compute_lyndon_bwt_9n(unsigned char *s, uint_t *A, uint_t n){
+int compute_lyndon_bwt_9n(unsigned char *s, int_t *A, int_t n){
 
 int_t i;
 
@@ -271,7 +271,7 @@ int_t i;
 	#endif
 	
 	// 1. sort
-	uint_t *SA = A;
+	int_t *SA = A;
 	sacak(s, SA, n);
 
 	#if STEP_TIME
@@ -299,10 +299,10 @@ int_t i;
 	#endif
 
 	//3. compute LF-array (in the space of SA[0,n-1])
-	uint_t *LF = (uint_t*) malloc(n*sizeof(uint_t));
-	uint_t *C = (uint_t*) malloc(SIGMA*sizeof(uint_t));
+	int_t *LF = (int_t*) malloc(n*sizeof(int_t));
+	int_t *C = (int_t*) malloc(SIGMA*sizeof(int_t));
 
-	uint_t sigma = 0;
+	int_t sigma = 0;
 
 	//counter
 	for(i=0; i<SIGMA; i++) C[i]=0;
@@ -312,7 +312,7 @@ int_t i;
 	}
 
 	sigma++;
-	uint_t *F = (uint_t*) malloc(sigma*sizeof(uint_t));
+	int_t *F = (int_t*) malloc(sigma*sizeof(int_t));
 	unsigned char *Alpha = (unsigned char*) malloc(sigma*sizeof(unsigned char));
 	for(i=0; i<sigma; i++) F[i]=0;
 
@@ -320,8 +320,8 @@ int_t i;
 	F[sigma-1]=n;
 	Alpha[sigma-1]=0;
 
-	uint_t sum=0;
-	uint_t j=0;
+	int_t sum=0;
+	int_t j=0;
 	for(i=0; i<SIGMA; i++){
 		sum+=C[i]; 
 		if(C[i]){ 
@@ -352,10 +352,10 @@ int_t i;
 		printf("step\tpos\tT^{rev}\tLyndon\n");
 	#endif
 
-	uint_t *LA = A;
+	int_t *LA = A;
 
-	uint_t pos = 0;
-	uint_t step = 1;//(n-1)-i
+	int_t pos = 0;
+	int_t step = 1;//(n-1)-i
 
 	for(i=n-1; i >= 0; i--){	
 
@@ -363,7 +363,7 @@ int_t i;
 		
 		while(stack_top(&S).i > pos) stack_pop(&S);
 
-		uint_t next = LF[pos];
+		int_t next = LF[pos];
 
 		#if PERMUTED
 			LA[pos] = step-stack_top(&S).j;
@@ -401,7 +401,7 @@ return 0;
 }
 
 //Giovanni's version
-int compute_lyndon_text_9n(unsigned char *s, uint_t *A, uint_t n){
+int compute_lyndon_text_9n(unsigned char *s, int_t *A, int_t n){
 
 int_t i;
 
@@ -417,7 +417,7 @@ int_t i;
 	#endif
 	
 	// 1. sort
-	uint_t *SA = (uint_t*) malloc(n*sizeof(uint_t));
+	int_t *SA = (int_t*) malloc(n*sizeof(int_t));
 	sacak(s, SA, n);
 
 	#if STEP_TIME
@@ -427,18 +427,18 @@ int_t i;
 	#endif
 
 	//2. compute BWT
-	uint_t* bwt = SA; 
+	int_t* bwt = SA; 
 	for(i=0; i<n; i++){
 		bwt[i] = (SA[i])?s[SA[i]-1]:0;
 	}	
 
 	//2. compute C 
 
-	uint_t *C = (uint_t*) malloc(SIGMA*sizeof(uint_t));
+	int_t *C = (int_t*) malloc(SIGMA*sizeof(int_t));
 	for(i=0; i<SIGMA; i++) C[i]=0;
 	for(i=0; i<n; i++) C[s[i]]++;
 
-	uint_t sum=0;
+	int_t sum=0;
 	for(i=0; i<SIGMA; i++){
 		sum+=C[i]; C[i]=sum-C[i];
 	}
@@ -450,7 +450,7 @@ int_t i;
 	#endif
 
 	//3. compute LF-array (in the space of SA[0,n-1])
-	uint_t *LF = SA; 
+	int_t *LF = SA; 
 	for(i=0; i<n; i++) LF[i] = C[bwt[i]]++;
 
 	#if STEP_TIME
@@ -469,15 +469,15 @@ int_t i;
 		printf("step\tpos\tT^{rev}\tLyndon\n");
 	#endif
 
-	uint_t *LA = A;
+	int_t *LA = A;
 
-	uint_t pos = 0;
-	uint_t step = 1;//(n-1)-i
+	int_t pos = 0;
+	int_t step = 1;//(n-1)-i
 
 	for(i=n-1; i >= 0; i--){	
 
 		while(stack_top(&S).i > pos) stack_pop(&S);
-		uint_t next = LF[pos];
+		int_t next = LF[pos];
 
 		#if PERMUTED
 			LA[pos] = step-stack_top(&S).j;
@@ -506,7 +506,7 @@ return 0;
 }
 
 
-int compute_lyndon_bwt(unsigned char *s, uint_t *A, uint_t n){
+int compute_lyndon_bwt(unsigned char *s, int_t *A, int_t n){
 
 	#if SAVE_SPACE
 		#if COMPUTE_BWT
@@ -523,15 +523,15 @@ int compute_lyndon_bwt(unsigned char *s, uint_t *A, uint_t n){
 
 /**********************************************************************/
 
-int lyndon_check(unsigned char *s, uint_t *LA, uint_t n, int print){
+int lyndon_check(unsigned char *s, int_t *LA, int_t n, int print){
 
 int check=1;
-uint_t i;
+int_t i;
 
-	uint_t *SA = (uint_t*) malloc(n*sizeof(uint_t));
+	int_t *SA = (int_t*) malloc(n*sizeof(int_t));
 	sacak(s, SA, n);
 
-	uint_t *ISA = (uint_t*) malloc(n*sizeof(uint_t));
+	int_t *ISA = (int_t*) malloc(n*sizeof(int_t));
 	for(i=0; i<n; i++) ISA[SA[i]]=i;
 
 	// print output
@@ -553,7 +553,7 @@ uint_t i;
 			    int start=i;
 			#endif
 	
-			uint_t k;	
+			int_t k;	
 			for(k = start; k < n; k++) {
 				printf("%c", s[k]-1);
 			}
@@ -599,7 +599,7 @@ uint_t i;
 
 /**********************************************************************/
 
-int compute_nsv(uint_t* NSV, uint_t *array, int_t n){
+int compute_nsv(int_t* NSV, int_t *array, int_t n){
 
 	stack S;
 	S.top=0; S.size=STACK_SIZE;
@@ -627,7 +627,7 @@ return 0;
 
 /**********************************************************************/
 
-int compute_lyndon_nsv(unsigned char *s, uint_t *A, uint_t n){
+int compute_lyndon_nsv(unsigned char *s, int_t *A, int_t n){
 
 int_t i;
 
@@ -643,8 +643,8 @@ int_t i;
 	#endif
 	
 	// 1. sort
-	//uint_t *SA = A;
-	uint_t *SA = (uint_t*) malloc(n*sizeof(uint_t));
+	//int_t *SA = A;
+	int_t *SA = (int_t*) malloc(n*sizeof(int_t));
 	sacak(s, SA, n);
 
 	#if STEP_TIME
@@ -654,7 +654,7 @@ int_t i;
 	#endif
 
 	//2. compute ISA
-	uint_t *ISA = A;
+	int_t *ISA = A;
 	for(i=0; i<n; i++) ISA[SA[i]]=i;
 
 	#if STEP_TIME
@@ -664,7 +664,7 @@ int_t i;
 	#endif
 
 	//3. compute NSV
-	uint_t *NSV = SA; //(in the space of SA[0,n-1])
+	int_t *NSV = SA; //(in the space of SA[0,n-1])
 	compute_nsv(NSV, ISA, n);
 	NSV[n-1]=n;
 
@@ -679,7 +679,7 @@ int_t i;
 		printf("step\tpos\tT^{rev}\tLyndon\n");
 	#endif
 
-	uint_t *LA = A;
+	int_t *LA = A;
 	for(i=0; i < n; i++){	
 		LA[i] = NSV[i]-i;
 	}
@@ -702,7 +702,7 @@ return 0;
 
 /**********************************************************************/
 
-int compute_lyndon_max_lyn(unsigned char *s, uint_t *A, uint_t n){
+int compute_lyndon_max_lyn(unsigned char *s, int_t *A, int_t n){
 
 int_t j;
 
@@ -711,15 +711,15 @@ int_t j;
 		tstart(&t_total, &c_total); 
 	#endif
 
-	uint_t *LA = A;
+	int_t *LA = A;
 	for(j=0; j < n-1; j++){	
 
-		uint_t i = j+1;
-		uint_t max = j+1;
+		int_t i = j+1;
+		int_t max = j+1;
 
 		while(i<n){
 
-			uint_t k = 0;
+			int_t k = 0;
 			while(s[j+k]==s[i+k]) k++;
 
 			if(s[j+k]<s[i+k]){

@@ -71,12 +71,12 @@ return 0;
 
 /*******************************************************************/
 
-int bwt_lyndon_suffix_order(char *T, uint_t *LA, int n){
+int bwt_lyndon_suffix_order(char *T, int_t *LA, int n){
 
 int p, r=1;
 int i, s;
 
-uint_t size=1;
+int_t size=1;
 //base cases
 LA[n-2]=size++;
 LA[n-1]=size++;
@@ -100,7 +100,7 @@ for(s=n-3; s>=0; s--){
 }
 
 for(i=n-1; i>0; i--){
-  uint_t max=0;
+  int_t max=0;
   for(s=i-1; s>=0; s--){
     if(LA[s]<LA[i] && LA[s]>max) max = LA[s];
   }
@@ -110,7 +110,7 @@ for(i=n-1; i>0; i--){
 return 0;
 }
 /*******************************************************************/
-int bwt_lyndon_text_order(char *T, uint_t *LA, int n){
+int bwt_lyndon_text_order(char *T, int_t *LA, int n){
 
   int p, r=1;
   int i, s;
@@ -152,7 +152,7 @@ int bwt_lyndon_text_order(char *T, uint_t *LA, int n){
 return 0;
 }
 /*******************************************************************/
-int bwt_lyndon_inplace(char *T, uint_t *LA, int n){
+int bwt_lyndon_inplace(char *T, int_t *LA, int n){
 
 #if PERMUTED
   bwt_lyndon_suffix_order(T, LA, n);    
@@ -210,7 +210,8 @@ void get_count(char* T, int *C){
 
   int i;
   for(i=0; i<UCHAR_SIZE; i++) C[i]=0;
-  for(i=0; i<strlen(T); i++) C[T[i]]++;  
+  int size = strlen(T);
+  for(i=0; i<size; i++) C[(int)T[i]]++;  
 }
 
 void get_bucket(int *C, int *B){
