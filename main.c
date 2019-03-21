@@ -57,12 +57,13 @@ return str;
 void usage(char *name){
   printf("\n\tUsage: %s [options] FILE \n\n",name);
   puts("Computes the Lyndon-array of FILE");
-  puts("Output:\tLyndon-array\n");
+  puts("Output:\tLyndon-array (and Suffix-array)\n");
   puts("Available options:");
   puts("\t-h\tthis help message");
   puts("\t-t\ttime");
   puts("\t-v\tverbose");
-  puts("\t-v\tcheck\n");
+  puts("\t-v\tcheck");
+  puts("\t-o\toutput\n");
   exit(EXIT_FAILURE);
 }
 
@@ -76,13 +77,13 @@ clock_t c_start=0;
   extern char *optarg;
   extern int optind, opterr, optopt;
 
-  int c=0, time=0, verbose=0, check=0, print=0;
+  int c=0, time=0, verbose=0, check=0, print=0, output=0;
   char *c_file=NULL;
 
   size_t  d=0; //number of documents
   int ALG=10;//Algorithm
 
-  while ((c=getopt(argc, argv, "vthp:d:A:c")) != -1) {
+  while ((c=getopt(argc, argv, "vthp:d:A:co")) != -1) {
     switch (c)
     {
       case 'v':
@@ -99,6 +100,8 @@ clock_t c_start=0;
         ALG=(size_t)atoi(optarg); break;
       case 'c':
         check++; break;
+      case 'o':
+        output++; break;
       case '?':
         exit(EXIT_FAILURE);
     }
@@ -282,6 +285,26 @@ clock_t c_start=0;
       printf("\n");
     }
     printf("########\n");
+  }
+
+  if(output){
+    char c_out[255];
+    FILE *f_out = NULL;
+    printf("OUTPUT:\n");
+    if(LA){
+      sprintf(c_out, "%s.la", c_file);
+      printf("%s\n", c_out);
+      f_out = file_open(c_out, "wb");
+      fwrite(LA, sizeof(int_t), n, f_out);
+      file_close(f_out);
+    }
+    if(SA){
+      sprintf(c_out, "%s.sa", c_file);
+      printf("%s\n", c_out);
+      f_out = file_open(c_out, "wb");
+      fwrite(SA, sizeof(int_t), n, f_out);
+      file_close(f_out);
+    }
   }
 
   free(str);

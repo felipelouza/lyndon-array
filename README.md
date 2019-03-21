@@ -22,6 +22,7 @@ make
 -p P  print the output arrays LA[1,P] and SA[1,P] (for debug)
 -d D  use the first D documents of the INPUT
 -v    verbose output
+-o    output computed arrays to disk (INPUT.la and INPUT.sa)
 -h    this help message
 ```
 _Notes:_ 
