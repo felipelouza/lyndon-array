@@ -156,10 +156,12 @@ clock_t c_start=0;
       strcpy(copy, (char*)str);
   }
 
-  //sorted array
-  int_t *LA = (int_t*) malloc(n*sizeof(int_t));
-  for(i=0; i<n; i++) LA[i]=0;
-
+  //lyndon array
+  int_t *LA = NULL;
+  if(ALG<=10){
+    LA = (int_t*) malloc(n*sizeof(int_t));
+    for(i=0; i<n; i++) LA[i]=0;
+  }
 
   int_t *SA = NULL;
   if(ALG>=6){ //also computes SA[1,n]
@@ -229,6 +231,13 @@ clock_t c_start=0;
       printf("TOTAL:\n");
       fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
       break;
+
+    case 11:  printf("## SACAK 5n (linear) ##\n"); 
+      time_start(&t_start, &c_start);
+      sacak(str, (int_t*)SA, n);
+      printf("TOTAL:\n");
+      fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
+      break;
     
     /****/
 
@@ -275,11 +284,9 @@ clock_t c_start=0;
     printf("########\n");
   }
 
-  free(LA);
   free(str);
-
-  if(SA)
-    free(SA);
+  if(LA) free(LA);
+  if(SA) free(SA);
 
 return 0;
 }
