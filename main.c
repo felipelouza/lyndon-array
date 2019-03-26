@@ -63,6 +63,7 @@ void usage(char *name){
   puts("\t-t\ttime");
   puts("\t-v\tverbose");
   puts("\t-v\tcheck");
+  puts("\t-s\tcomputes some statistics for LA");
   puts("\t-o\toutput\n");
   exit(EXIT_FAILURE);
 }
@@ -77,13 +78,13 @@ clock_t c_start=0;
   extern char *optarg;
   extern int optind, opterr, optopt;
 
-  int c=0, time=0, verbose=0, check=0, print=0, output=0;
+  int c=0, time=0, verbose=0, check=0, print=0, output=0, stats=0;
   char *c_file=NULL;
 
   size_t  d=0; //number of documents
   int ALG=10;//Algorithm
 
-  while ((c=getopt(argc, argv, "vthp:d:A:co")) != -1) {
+  while ((c=getopt(argc, argv, "vthp:d:A:cos")) != -1) {
     switch (c)
     {
       case 'v':
@@ -102,6 +103,8 @@ clock_t c_start=0;
         check++; break;
       case 'o':
         output++; break;
+      case 's':
+        stats++; break;
       case '?':
         exit(EXIT_FAILURE);
     }
@@ -265,7 +268,7 @@ clock_t c_start=0;
     if(SA){
       printf("SA: ");
       if(!suffix_array_check((unsigned char*)str, (int_t*)SA, n, sizeof(char), 0)) fprintf(stderr,"isNotSorted!!\n");//compares upt to symbol '0'
-			else printf("isSorted!!\n");
+      else printf("isSorted!!\n");
     }
   }
 
@@ -305,6 +308,38 @@ clock_t c_start=0;
       fwrite(SA, sizeof(int_t), n, f_out);
       file_close(f_out);
     }
+  }
+
+  if(LA && stats){
+    int_t max=0, j=0;
+    size_t sum=0;
+    
+    for(i=0;i<n;i++){
+      sum+=LA[i];
+      if(LA[i]>max){max=LA[i];j=i;}
+    }
+
+    printf("##\n");
+    printf("Max(LA[%d]): % "PRIdN"\n", j, max);
+    printf("Avg(LA[i]): %.2lf\n", (double)sum/(double)n);
+
+    i=0;
+    int_t count=0;
+    max=0;
+    while(i<n){
+      #if DEBUG
+      printf("%d\t%d\n", i, LA[i]);
+      #endif
+      count++;
+      if(LA[i]>max) max=LA[i];
+      i+=LA[i];
+    }
+
+    printf("##\n");
+    printf("Number of Lyndon factors: % "PRIdN"\n", count);
+    printf("Average length: %.2lf\n", (double)n/(double)count);
+    printf("Maximum length: % "PRIdN"\n", max);
+    printf("##\n");
   }
 
   free(str);
