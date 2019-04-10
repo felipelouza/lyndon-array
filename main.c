@@ -62,7 +62,7 @@ void usage(char *name){
   puts("\t-h\tthis help message");
   puts("\t-t\ttime");
   puts("\t-v\tverbose");
-  puts("\t-v\tcheck");
+  puts("\t-c\tcheck");
   puts("\t-s\tcomputes some statistics for LA");
   puts("\t-o\toutput\n");
   exit(EXIT_FAILURE);
@@ -281,7 +281,7 @@ clock_t c_start=0;
       printf("%zu) %" PRIdN "\t", i, LA[i]);
       if(SA) printf("%" PRIdN "\t", SA[i]);
       int_t j=i;
-      for(j=i; j<(int_t) min(i+10,n); j++){
+      for(j=i; j<(int_t) min(i+LA[i],n); j++){
         char c = (str[j]==0)?'#':(str[j]>1?str[j]-1:'$');
         printf("%c", c);
       }
