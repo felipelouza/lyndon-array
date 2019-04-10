@@ -350,6 +350,8 @@ static __attribute__((destructor)) void finish(void)
             "exiting, total: %'lld, peak: %'lld, current: %'lld\n",
             total, peak, curr);
 
+    fprintf(stderr, "%'lld\n", peak);
+
     //fprintf(stderr, "%'lld\t%'lld\t%'lld\n", total, peak, curr);
 }
 
