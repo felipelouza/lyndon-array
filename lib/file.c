@@ -99,7 +99,7 @@ char** load_multiple_txt(FILE* f_in, size_t *k, size_t *n) {
 		size_t len = 0; c_buffer[i] = NULL;		
 		ssize_t size = getline(&c_buffer[i], &len, f_in);
 		if (size == -1){
-      free(c_buffer[i]);
+	      		free(c_buffer[i]);
 			*k = i;
 			break;		
 		}
@@ -109,7 +109,7 @@ char** load_multiple_txt(FILE* f_in, size_t *k, size_t *n) {
 
 		if(i==n_alloc-1){
 			n_alloc+=N_ALLOC;
-      c_buffer = (char**) realloc(c_buffer, n_alloc*sizeof(char*));
+      			c_buffer = (char**) realloc(c_buffer, n_alloc*sizeof(char*));
 		}
 	}
 
@@ -119,10 +119,10 @@ return c_buffer;
 // read sequences separeted by '@' line
 char** load_multiple_fastq(FILE* f_in, size_t *k, size_t *n){
 
-  int n_alloc = N_ALLOC;
+	int n_alloc = N_ALLOC;
 	char **c_buffer = (char**) malloc(n_alloc*sizeof(char*));
 
-  size_t len = 0;
+  	size_t len = 0;
 	char *buf = NULL;
 	size_t i;
  	for(i=0; i<*k; i++){
@@ -130,16 +130,16 @@ char** load_multiple_fastq(FILE* f_in, size_t *k, size_t *n){
 		len = 0; buf = NULL;
 		ssize_t size = getline(&buf, &len, f_in); // @'s line
 		free(buf);
-    if (size <= 1){
+		if (size <= 1){
 			*k = i;
 			break;		
 		}
 
 		len = 0; c_buffer[i] = NULL;
 		size = getline(&c_buffer[i], &len, f_in); // read line
-    c_buffer[i][size-1] = 0;
+		c_buffer[i][size-1] = 0;
 
-    (*n) += size;
+    		(*n) += size;
 
 		len = 0; buf = NULL;
 		getline(&buf, &len, f_in); // +'s line
@@ -150,7 +150,7 @@ char** load_multiple_fastq(FILE* f_in, size_t *k, size_t *n){
 
 		if(i==n_alloc-1){
 			n_alloc+=N_ALLOC;
-      c_buffer = (char**) realloc(c_buffer, n_alloc*sizeof(char*));
+     			c_buffer = (char**) realloc(c_buffer, n_alloc*sizeof(char*));
 		}
 	}
 
@@ -208,7 +208,7 @@ char** load_multiple_fasta(FILE* f_in, size_t *k, size_t *n){
 
 		if(i==n_alloc-1){
 			n_alloc+=N_ALLOC;
-      c_buffer = (char**) realloc(c_buffer, n_alloc*sizeof(char*));
+      			c_buffer = (char**) realloc(c_buffer, n_alloc*sizeof(char*));
 		}
 	}
 

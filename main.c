@@ -25,6 +25,10 @@
   #define DEBUG 0 
 #endif
 
+#ifndef CAT 
+  #define CAT 1 
+#endif
+
 /*******************************************************************/
 unsigned char* cat_char(unsigned char** R, size_t d, size_t *n){
 
@@ -39,7 +43,9 @@ unsigned char* cat_char(unsigned char** R, size_t d, size_t *n){
     for(j=0; j<m; j++){
       if(R[i][j]<255) str[l++] = R[i][j]+1;
     }
+#if CAT
     str[l++] = 1; //add 1 as separator
+#endif
   }
 
   str[l++]=0;
@@ -125,7 +131,9 @@ clock_t c_start=0;
   }
 
   /********/
-
+  unsigned char *str = NULL;
+#if CAT
+  // reading the input as a collection of documents
   unsigned char **R;
   size_t i, n=0;
 
@@ -137,7 +145,6 @@ clock_t c_start=0;
   }
 
   //concatenate strings
-  unsigned char *str = NULL;
   str = cat_char(R, d, &n);
 
   printf("d = %zu\n", d);
@@ -155,6 +162,25 @@ clock_t c_start=0;
   for(i=0; i<d; i++)
     free(R[i]);
   free(R);
+#else
+  // reading the input file as a single document
+  size_t i, n=0;
+  FILE *f = fopen(c_file,"r");
+  if(f==NULL) {perror("Cannot open input file"); exit(1);}
+  int e = fseek(f,0,SEEK_END);
+  if(e)  {perror("Cannot seek"); exit(1);}
+  n = ftell(f);
+  rewind(f);
+  str = malloc((n+1)*sizeof(char));
+  if(str==NULL) {perror("Cannot alloc"); exit(1);}
+  e = fread(str,1,n,f);
+  if(e!=n) if(f==NULL) {perror("Cannot read from input file"); exit(1);}
+  str[n++] = 0; // terminator 
+  (void) d;
+  printf("N = %zu bytes\n", n);
+  printf("sizeof(int) = %zu bytes\n", sizeof(int_t));  
+#endif
+
 
   char* copy = NULL;
   if(check && ALG==5){
