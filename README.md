@@ -8,7 +8,9 @@ In particular, we introduce algorithm **SACA-K+LA** \[1\] that computes **LA** t
 
 SACA-K+LA extends the optimal suffix sorting algorithm **SACA-K** \[2\] to also compute LA in linear time using O(\sigma) words of additional space, which is optimal for alphabets of constant size. 
 
-Experimental results have shown that our algorithm is competitive in practice. We provide four versions of SACA-K+LA, the last version, option ``-A 10``, corresponds to the **optimal solution**.
+Experimental results have shown that our algorithm is competitive in time and space, compared to solutions that compute only LA. 
+
+We provide four versions of SACA-K+LA, the last version, option ``-A 10``, corresponds to the **optimal solution**.
 
 
 ## Build requirements
