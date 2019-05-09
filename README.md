@@ -4,11 +4,11 @@ This repository contains a set of algorithms to compute the **Lyndon-array** (LA
 
 ## Introduction
 
-In particular, we introduce algorithm **SACA-K+LA** \[1\] that computes **LA** together with the **suffix array** (SA) for a string T\[1,n\] in linear time.
+In particular, we introduce algorithm **SACA-K+LA** \[1\] that computes **LA** together with the **suffix array** (SA) for T\[1,n\] in linear time.
 
 SACA-K+LA extends the optimal suffix sorting algorithm **SACA-K** \[2\] to also compute LA in linear time using O(\sigma) words of additional space, which is optimal for alphabets of constant size. 
 
-Experimental results have shown that our algorithm is competitive in practice. We provide four versions of SACA-K+LA, the last version, option ``-A 9``, corresponds to the **optimal solution**.
+Experimental results have shown that our algorithm is competitive in practice. We provide four versions of SACA-K+LA, the last version, option ``-A 10``, corresponds to the **optimal solution**.
 
 
 ## Build requirements
@@ -44,7 +44,7 @@ _Notes:_
 |:--:|------------------------|----------|:---------------:|-----------------------|:----------------:|
 |  1 | Lyndon_NSV **\[3\]**   |    LA    |       O(n)      | 9n bytes + O(n)-words |    ISA+Stack     |
 |  2 | GSACA_LA  **\[4\]**    |    LA    |       O(n)      | 17n bytes             |  GSIZE+PREV+ISA  |
-|  3 | MAX_LA  **\[5\]**      |    LA    |      O(n^2)     | 5n bytes              |                  |
+|  3 | MAX_LYN **\[5\]**      |    LA    |      O(n^2)     | 5n bytes              |                  |
 |  4 | Lyndon_BWT **\[6\]**   |    LA    |       O(n)      | 9n bytes + O(n)-words |     LF+Stack     |
 |  5 | BWT_INPLACE_LA         | LA + BWT |      O(n^2)     | 5n bytes              |                  |
 |  6 | GSACA_LA+SA **\[4\]**  |  LA + SA |       O(n)      | 17n bytes             |  GSIZE+PREV+ISA  |
