@@ -26,7 +26,7 @@
 #endif
 
 #ifndef CAT 
-  #define CAT 1 
+  #define CAT 0 
 #endif
 
 /*******************************************************************/
@@ -43,7 +43,7 @@ unsigned char* cat_char(unsigned char** R, size_t d, size_t *n){
     for(j=0; j<m; j++){
       if(R[i][j]<255) str[l++] = R[i][j]+1;
     }
-#if CAT
+#if CAT == 2
     str[l++] = 1; //add 1 as separator
 #endif
   }

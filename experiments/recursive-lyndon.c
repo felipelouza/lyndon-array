@@ -44,7 +44,7 @@ int recursive_decomposition(unsigned char *str, int_t *LA, size_t start, size_t 
       printf(" %zu\t%d\n", i, LA[i]+1);
       */
 
-      next = recursive_decomposition(str, LA, i+1, i+LA[i], level+1, total, large, mem, print);
+      next = recursive_decomposition(str, LA, i+1, i+LA[i]-1, level+1, total, large, mem, print);
       if(print) printf("level = %d\n", level);
     }
 
@@ -69,7 +69,7 @@ unsigned char* cat_char(unsigned char** R, size_t d, size_t *n){
     for(j=0; j<m; j++){
       if(R[i][j]<255) str[l++] = R[i][j]+1;
     }
-    str[l++] = 1; //add 1 as separator
+    //str[l++] = 1; //add 1 as separator
   }
 
   str[l++]=0;

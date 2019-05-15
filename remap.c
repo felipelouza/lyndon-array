@@ -93,8 +93,8 @@ int main(int argc, char *argv[])
   }
   if(n==0) {puts("Empty input file"); return 2;}
   // --- count # symbols 
-  int tot=0;
-  for(int i=0;i<256;i++)
+  int tot=0, i=0;
+  for(i=0;i<256;i++)
     if(count[i]!=0) tot++;
   // report alphabet
   double entropy = report_alpha(count,n);
@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
     }
     {// check if remapping is really necessary
       unsigned int firstk = 0;
-      for(int i=0;i<=k;i++) firstk += count[i];
+      for(i=0;i<=k;i++) firstk += count[i];
       if(firstk==0) {
         if(k>0)
           printf("Symbols 0..%d not present in input file. Remapping not necessary\n",k);
@@ -148,8 +148,8 @@ int main(int argc, char *argv[])
 // that no symbol is remapped to 0..k 
 void remap_alpha(unsigned long count[], int k, int map[])
 {
-  int jump = k+1;
-  for(int i=0;i<256;i++) {
+  int jump = k+1, i=0;
+  for(i=0;i<256;i++) {
     if(count[i]>0) {
       map[i] = i + jump;
       if(jump>0) 
@@ -169,7 +169,8 @@ double report_alpha(unsigned long count[], double len)
 {
   double entropia=0;
   // --- print
-  for(int c=0; c<256; c++)
+  int c=0;
+  for(c=0; c<256; c++)
     if(count[c]) {
       if(verbose>0) {
         printf("%3d  %2x  ", c, c);
