@@ -1,21 +1,21 @@
 /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
    remap.c
-   simple reporting/remapping tool for suffix array experiments 
+   simple reporting/remapping tool for suffix array construction
     
    Report only usage:
    
       remap filename [-v]
    
    Report number of distinct symbols and entropy of input file
-   With option [-v] report number of occurrences of eacxh symbol
+   With option [-v] report number of occurrences of each symbol
    
    Remap usage:
      
       remap filename k [-v]
       
    Try to remap the symbols in the input file so that the symbols 0..k
-   do apper in the remapped file. The remapping is done preserving the
-   lexicographic order of the suffixes; the remappend content is written 
+   do not appear in the remapped file. The remapping is done preserving the
+   lexicographic order of the suffixes; the remapped content is written 
    to file filename.k
    
    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
@@ -31,16 +31,16 @@ void remap_alpha(unsigned long count[], int k, int map[]);
 int verbose = 0; // verbose output 
 
 void usage(char *name) {
-    fprintf(stderr, "Usage: %s filename [k] [-v] [-h]\n",name);
+    fprintf(stderr, "Usage:\n\t %s filename [k] [-v] [-h]\n\n",name);
     fprintf(stderr, "If called with only a file name reports the number of occurrences\n");    
-    fprintf(stderr, "of each symbol and the order-0 entropy of the file\n");
+    fprintf(stderr, "of each symbol and the order-0 entropy of the file\n\n");
     fprintf(stderr, "If called with a second integer argument remap symbols so that\n");
     fprintf(stderr, "symbols 0,1,..k, do not appear in the text (if possible)\n"); 
-    fprintf(stderr, "The remapping is done preserving the lexicographic order of substrings\n"); 
+    fprintf(stderr, "The remapping is done preserving the lexicographic order of substrings\n\n"); 
     fprintf(stderr, "Command line options:\n"); 
     fprintf(stderr, "  -h\tthis help message\n"); 
     fprintf(stderr, "  -v\treport number of occurrences of each symbol\n"); 
-    return;        
+    exit(1);        
 }
 
 
@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
 
   /* ------------- read options from command line ----------- */
   opterr = 0;
-  while ((c=getopt(argc, argv, "h")) != -1) {
+  while ((c=getopt(argc, argv, "hv")) != -1) {
     switch (c) {
       case 'h':
         usage(argv[0]); break;
