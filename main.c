@@ -196,6 +196,8 @@ clock_t c_start=0;
     printf("sizeof(int) = %zu bytes\n", sizeof(int_t));  
   }
 
+  /********/
+
   char* copy = NULL;
   if(check && ALG==5){
       copy = (char*) malloc((n+1)*sizeof(char));

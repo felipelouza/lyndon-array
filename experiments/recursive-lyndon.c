@@ -22,6 +22,10 @@
   #define DEBUG 0 
 #endif
 
+#ifndef CAT 
+  #define CAT 1 
+#endif
+
 /*******************************************************************/
 int recursive_decomposition(unsigned char *str, int_t *LA, size_t start, size_t end, int level, size_t *total, size_t *large, size_t mem, int print){
 
@@ -69,7 +73,9 @@ unsigned char* cat_char(unsigned char** R, size_t d, size_t *n){
     for(j=0; j<m; j++){
       if(R[i][j]<255) str[l++] = R[i][j]+1;
     }
-    //str[l++] = 1; //add 1 as separator
+#if CAT == 1
+    str[l++] = 1; //add 1 as separator
+#endif
   }
 
   str[l++]=0;
@@ -85,15 +91,19 @@ return str;
 
 
 void usage(char *name){
-  printf("\n\tUsage: %s [options] FILE \n\n",name);
-  puts("Recursive Lyndon-decomposition");
+  printf("recursive-lyndon:\n\tUsage: %s [options] FILE \n\n",name);
+  puts("Recursive Lyndon-decomposition\n");
   puts("Available options:");
-  puts("\t-h\tthis help message");
-  puts("\t-t\ttime");
-  puts("\t-v\tverbose");
+  puts("\t-d D\tuse the first D documents of the INPUT");
+  puts("\t-b\tread INPUT as binary input (default)");
+  puts("\t-f\tread INPUT as formated input (txt, fasta or fastq)");
+  puts("\t-v\tverbose output");
   puts("\t-s\tcomputes some statistics for LA");
   puts("\t-M m\tmemory is equal to m");
-  puts("\t-P p\tmemory is equal to n/2^p\n");
+  puts("\t-P p\tmemory is equal to n/2^p");
+  puts("Debug options:");
+  puts("\t-p\tprint lyndon decomposition");
+  puts("\t-h\tthis help message");
   exit(EXIT_FAILURE);
 }
 
@@ -108,13 +118,15 @@ clock_t c_start=0;
   extern int optind, opterr, optopt;
 
   int c=0, time=0, verbose=0, stats=0, print=0;
+  //input options
+  int bin=1;// bin or formated input (txt, fasta and fastq)
   size_t  mem=SIZE_MAX;
   char *c_file=NULL;
 
   size_t  d=0; //number of documents
   int power=0;
 
-  while ((c=getopt(argc, argv, "vthd:sM:pP:")) != -1) {
+  while ((c=getopt(argc, argv, "vthd:sM:pP:bf")) != -1) {
     switch (c)
     {
       case 'v':
@@ -133,6 +145,10 @@ clock_t c_start=0;
         print++; break;
       case 'P':
         power=atoi(optarg); break;
+      case 'b':
+        bin=1; break;
+      case 'f':
+        bin=0; break;
       case '?':
         exit(EXIT_FAILURE);
     }
@@ -153,36 +169,63 @@ clock_t c_start=0;
   }
 
   /********/
-
-  unsigned char **R;
+  unsigned char *str = NULL;
   size_t i, n=0;
 
-  //disk access
-  R = (unsigned char**) file_load_multiple(c_file, &d, &n);
-  if(!R){
-    fprintf(stderr, "Error: less than %zu strings in %s\n", d, c_file);
-    return 0;
+  if(bin==0){
+    // reading the input as a collection of documents
+    unsigned char **R;
+
+    //disk access
+    R = (unsigned char**) file_load_multiple(c_file, &d, &n);
+    if(!R){
+      fprintf(stderr, "Error: less than %zu strings in %s\n", d, c_file);
+      return 0;
+    }
+
+    //concatenate strings
+    str = cat_char(R, d, &n);
+
+    printf("d = %zu\n", d);
+    printf("N = %zu bytes\n", n);
+    printf("sizeof(int) = %zu bytes\n", sizeof(int_t));
+
+
+    #if DEBUG
+      printf("R:\n");
+      for(i=0; i<d; i++)
+        printf("%" PRIdN ") %s (%zu)\n", i, R[i], strlen((char*)R[i]));
+    #endif
+
+    //free memory
+    for(i=0; i<d; i++)
+      free(R[i]);
+    free(R);
+  }
+  else{ //bin
+    // reading the input file as a single document
+    FILE *f = fopen(c_file,"r");
+    if(f==NULL) {perror("Cannot open input file"); exit(1);}
+    int e = fseek(f,0,SEEK_END);
+    if(e)  {perror("Cannot seek"); exit(1);}
+    n = ftell(f);
+    rewind(f);
+
+    str = malloc((n+1)*sizeof(char));
+    if(str==NULL) {perror("Cannot alloc"); exit(1);}
+
+    e = fread(str,1,n,f);
+    if(e!=n) if(f==NULL) {perror("Cannot read from input file"); exit(1);}
+    str[n++] = 0; // terminator 
+
+    (void) d;
+    printf("N = %zu bytes\n", n);
+    printf("sizeof(int) = %zu bytes\n", sizeof(int_t));  
   }
 
-  //concatenate strings
-  unsigned char *str = NULL;
-  str = cat_char(R, d, &n);
 
-  printf("d = %zu\n", d);
-  printf("N = %zu bytes\n", n);
-  printf("sizeof(int) = %zu bytes\n", sizeof(int_t));
+  /********/
 
-
-  #if DEBUG
-    printf("R:\n");
-    for(i=0; i<d; i++)
-      printf("%" PRIdN ") %s (%zu)\n", i, R[i], strlen((char*)R[i]));
-  #endif
-
-  //free memory
-  for(i=0; i<d; i++)
-    free(R[i]);
-  free(R);
 
   //lyndon array
   int_t *LA = (int_t*) malloc(n*sizeof(int_t));
@@ -204,16 +247,17 @@ clock_t c_start=0;
     mem = n/pow(2,power);
     printf("power = %.0f\n", pow(2,power));
   }
-  printf("MEM = %zu bytes\n", mem);
+  if(mem==SIZE_MAX) printf("MEM = unlimited\n");
+  else printf("MEM = %zu bytes\n", mem);
   level = recursive_decomposition(str, LA, 0, n, level, &total, &large, mem, print);
 
   printf("##\n");
   printf("total = %zu\n", total);
-  printf("large = %zu\n", large);
   printf("level = %d\n", level);
+  printf("large = %zu\n", large);
   printf("##\n");
 
-  fprintf(stderr,"%zu\t%zu\t%d\n", total, large, level);
+  fprintf(stderr,"%zu\t%d\t%zu\n", total, level, large);
   /**/
 
 

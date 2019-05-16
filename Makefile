@@ -32,16 +32,13 @@ DEFINES = -DDEBUG=$(DEBUG) -DM64=$(M64) -DPERMUTED=$(PERMUTED) -DSTEP_TIME=$(STE
 
 CFLAGS += $(DEFINES)
 
-all: main remap
+all: main 
 
 clean:
-	\rm -f *.o ../*.o ../external/*.o lib/*o main remap
+	\rm -f *.o ../*.o ../external/*.o lib/*o main 
 
 main: main.c ${LIBOBJ} 
 	$(CC) -o main main.c ${LIBOBJ} $(CFLAGS) $(LFLAGS) 
-
-remap: remap.c
-	$(CC) -o $@ $< -O -g -Wall -lm 
 
 run:
 	./main $(INPUT) -A $(ALG)
