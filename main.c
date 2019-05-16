@@ -1,7 +1,7 @@
 /*
  * Lyndon Array Construction
  *
- * Author: Felipe A. Louza
+ * Authors: Felipe A. Louza and Giovanni Manzini
  * contact: louza@usp.br
  * 11/03/2019
  *
@@ -26,7 +26,7 @@
 #endif
 
 #ifndef CAT 
-  #define CAT 0 
+  #define CAT 1 
 #endif
 
 /*******************************************************************/
@@ -43,7 +43,7 @@ unsigned char* cat_char(unsigned char** R, size_t d, size_t *n){
     for(j=0; j<m; j++){
       if(R[i][j]<255) str[l++] = R[i][j]+1;
     }
-#if CAT == 2
+#if CAT == 1
     str[l++] = 1; //add 1 as separator
 #endif
   }
@@ -61,16 +61,21 @@ return str;
 
 
 void usage(char *name){
-  printf("\n\tUsage: %s [options] FILE \n\n",name);
+  printf("lyndon-array:\n\tUsage: %s [options] FILE \n\n",name);
   puts("Computes the Lyndon-array of FILE");
   puts("Output:\tLyndon-array (and Suffix-array)\n");
   puts("Available options:");
-  puts("\t-h\tthis help message");
-  puts("\t-t\ttime");
-  puts("\t-v\tverbose");
-  puts("\t-c\tcheck");
+  puts("\t-A a\tpreferred algorithm to use (default 10)");
+  puts("\t-d D\tuse the first D documents of the INPUT");
+  puts("\t-b\tread INPUT as binary input (default)");
+  puts("\t-f\tread INPUT as formated input (txt, fasta or fastq)");
+  puts("\t-v\tverbose output");
+  puts("\t-o\toutput computed arrays to disk (INPUT.la and INPUT.sa)");
   puts("\t-s\tcomputes some statistics for LA");
-  puts("\t-o\toutput\n");
+  puts("Debug options:");
+  puts("\t-c\tcheck output (for debug)");
+  puts("\t-p P\tprint the output arrays LA[1,P] and SA[1,P] (for debug)");
+  puts("\t-h\tthis help message");
   exit(EXIT_FAILURE);
 }
 
@@ -84,13 +89,15 @@ clock_t c_start=0;
   extern char *optarg;
   extern int optind, opterr, optopt;
 
-  int c=0, time=0, verbose=0, check=0, print=0, output=0, stats=0;
+  int c=0, verbose=0, time=0, check=0, print=0, output=0, stats=0;
+  //input options
+  int bin=1;// bin or formated input (txt, fasta and fastq)
   char *c_file=NULL;
 
   size_t  d=0; //number of documents
   int ALG=10;//Algorithm
 
-  while ((c=getopt(argc, argv, "vthp:d:A:cos")) != -1) {
+  while ((c=getopt(argc, argv, "vthp:d:A:cosbf")) != -1) {
     switch (c)
     {
       case 'v':
@@ -111,6 +118,10 @@ clock_t c_start=0;
         output++; break;
       case 's':
         stats++; break;
+      case 'b':
+        bin=1; break;
+      case 'f':
+        bin=0; break;
       case '?':
         exit(EXIT_FAILURE);
     }
@@ -132,55 +143,58 @@ clock_t c_start=0;
 
   /********/
   unsigned char *str = NULL;
-#if CAT
-  // reading the input as a collection of documents
-  unsigned char **R;
   size_t i, n=0;
 
-  //disk access
-  R = (unsigned char**) file_load_multiple(c_file, &d, &n);
-  if(!R){
-    fprintf(stderr, "Error: less than %zu strings in %s\n", d, c_file);
-    return 0;
-  }
+  if(bin==0){
+    // reading the input as a collection of documents
+    unsigned char **R;
 
-  //concatenate strings
-  str = cat_char(R, d, &n);
+    //disk access
+    R = (unsigned char**) file_load_multiple(c_file, &d, &n);
+    if(!R){
+      fprintf(stderr, "Error: less than %zu strings in %s\n", d, c_file);
+      return 0;
+    }
 
-  printf("d = %zu\n", d);
-  printf("N = %zu bytes\n", n);
-  printf("sizeof(int) = %zu bytes\n", sizeof(int_t));
+    //concatenate strings
+    str = cat_char(R, d, &n);
+
+    printf("d = %zu\n", d);
+    printf("N = %zu bytes\n", n);
+    printf("sizeof(int) = %zu bytes\n", sizeof(int_t));
 
 
-  #if DEBUG
-    printf("R:\n");
+    #if DEBUG
+      printf("R:\n");
+      for(i=0; i<d; i++)
+        printf("%" PRIdN ") %s (%zu)\n", i, R[i], strlen((char*)R[i]));
+    #endif
+
+    //free memory
     for(i=0; i<d; i++)
-      printf("%" PRIdN ") %s (%zu)\n", i, R[i], strlen((char*)R[i]));
-  #endif
+      free(R[i]);
+    free(R);
+  }
+  else{ //bin
+    // reading the input file as a single document
+    FILE *f = fopen(c_file,"r");
+    if(f==NULL) {perror("Cannot open input file"); exit(1);}
+    int e = fseek(f,0,SEEK_END);
+    if(e)  {perror("Cannot seek"); exit(1);}
+    n = ftell(f);
+    rewind(f);
 
-  //free memory
-  for(i=0; i<d; i++)
-    free(R[i]);
-  free(R);
-#else
-  // reading the input file as a single document
-  size_t i, n=0;
-  FILE *f = fopen(c_file,"r");
-  if(f==NULL) {perror("Cannot open input file"); exit(1);}
-  int e = fseek(f,0,SEEK_END);
-  if(e)  {perror("Cannot seek"); exit(1);}
-  n = ftell(f);
-  rewind(f);
-  str = malloc((n+1)*sizeof(char));
-  if(str==NULL) {perror("Cannot alloc"); exit(1);}
-  e = fread(str,1,n,f);
-  if(e!=n) if(f==NULL) {perror("Cannot read from input file"); exit(1);}
-  str[n++] = 0; // terminator 
-  (void) d;
-  printf("N = %zu bytes\n", n);
-  printf("sizeof(int) = %zu bytes\n", sizeof(int_t));  
-#endif
+    str = malloc((n+1)*sizeof(char));
+    if(str==NULL) {perror("Cannot alloc"); exit(1);}
 
+    e = fread(str,1,n,f);
+    if(e!=n) if(f==NULL) {perror("Cannot read from input file"); exit(1);}
+    str[n++] = 0; // terminator 
+
+    (void) d;
+    printf("N = %zu bytes\n", n);
+    printf("sizeof(int) = %zu bytes\n", sizeof(int_t));  
+  }
 
   char* copy = NULL;
   if(check && ALG==5){

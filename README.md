@@ -28,14 +28,16 @@ make
 **Available options:**
 
 ```sh
--A a  preferred algorithm to use (default 1)
--c    check output (for debug)
--p P  print the output arrays LA[1,P] and SA[1,P] (for debug)
--d D  use the first D documents of the INPUT
--v    verbose output
--o    output computed arrays to disk (INPUT.la and INPUT.sa)
--s    computes some statistics for LA
--h    this help message
+-A a	preferred algorithm to use (default 10)
+-d D	use the first D documents of the INPUT
+-b	read INPUT as binary input (default)
+-f	read INPUT as formated input (txt, fasta or fastq)
+-v	verbose output
+-o	output computed arrays to disk (INPUT.la and INPUT.sa)
+-s	computes some statistics for LA
+-c	check output (for debug)
+-p P	print the output arrays LA[1,P] and SA[1,P] (for debug)
+-h	this help message
 ```
 _Notes:_ 
 - Supported extensions are _.txt_, _.fasta_ and _.fastq_.
