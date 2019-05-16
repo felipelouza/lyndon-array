@@ -68,7 +68,7 @@ void usage(char *name){
   puts("\t-A a\tpreferred algorithm to use (default 10)");
   puts("\t-d D\tuse the first D documents of the INPUT");
   puts("\t-b\tread INPUT as binary input (default)");
-  puts("\t-f\tread INPUT as formated input (txt, fasta or fastq)");
+  puts("\t-f\tread INPUT as formatted input (txt, fasta or fastq)");
   puts("\t-v\tverbose output");
   puts("\t-o\toutput computed arrays to disk (INPUT.la and INPUT.sa)");
   puts("\t-s\tcomputes some statistics for LA");
@@ -91,7 +91,7 @@ clock_t c_start=0;
 
   int c=0, verbose=0, time=0, check=0, print=0, output=0, stats=0;
   //input options
-  int bin=1;// bin or formated input (txt, fasta and fastq)
+  int bin=1;// bin or formatted input (txt, fasta and fastq)
   char *c_file=NULL;
 
   size_t  d=0; //number of documents

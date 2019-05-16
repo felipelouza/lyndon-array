@@ -31,7 +31,7 @@ make
 -A a	preferred algorithm to use (default 10)
 -d D	use the first D documents of the INPUT
 -b	read INPUT as binary input (default)
--f	read INPUT as formated input (txt, fasta or fastq)
+-f	read INPUT as formatted input (txt, fasta or fastq)
 -v	verbose output
 -o	output computed arrays to disk (INPUT.la and INPUT.sa)
 -s	computes some statistics for LA
