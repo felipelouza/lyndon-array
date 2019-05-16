@@ -350,6 +350,13 @@ clock_t c_start=0;
       fwrite(SA, sizeof(int_t), n, f_out);
       file_close(f_out);
     }
+    {
+      sprintf(c_out, "%s.bin", c_file);
+      printf("%s\n", c_out);
+      f_out = file_open(c_out, "wb");
+      fwrite(str, sizeof(unsigned char), n, f_out);
+      file_close(f_out);
+    }
   }
 
   if(LA && stats){
