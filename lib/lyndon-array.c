@@ -47,9 +47,9 @@ typedef struct{
         s_pair *array;
         int_t top;
         int_t size;
-} stack;
+} stack_pair;
 
-int stack_init(stack *S, int_t size){
+int stack_pair_init(stack_pair *S, int_t size){
 
 	S->array = (s_pair*) malloc(size*sizeof(s_pair));	
 	if(S->array==NULL) return 0;
@@ -60,7 +60,7 @@ int stack_init(stack *S, int_t size){
 return 0;
 }
 
-void stack_push(stack *S, int_t i, int_t j){
+void stack_pair_push(stack_pair *S, int_t i, int_t j){
 
 	if(S->top==S->size){
 		S->size += STACK_SIZE;
@@ -73,7 +73,7 @@ void stack_push(stack *S, int_t i, int_t j){
 	(S->top)++;
 }
 
-s_pair stack_top(stack *S){
+s_pair stack_pair_top(stack_pair *S){
 
 	s_pair aux;
 	aux.i = S->array[S->top-1].i;
@@ -82,11 +82,11 @@ s_pair stack_top(stack *S){
 return aux;
 }
 
-void stack_pop(stack *S){
+void stack_pair_pop(stack_pair *S){
 	(S->top)--;
 }
 
-void stack_print(stack *S){
+void stack_pair_print(stack_pair *S){
 
 	int_t i;
 
@@ -94,6 +94,57 @@ void stack_print(stack *S){
 		printf("%d\t(%d, %d)\n", i, S->array[i].i, S->array[i].j);
 	
 	printf("%d\t(%d, %d)\n", i, S->array[i].i, S->array[i].j);
+
+}
+
+/****************************************************************************/
+
+typedef struct{
+        int_t *array;
+        int_t top;
+        int_t size;
+} stack;
+
+int stack_init(stack *S, int_t size){
+
+	S->array = (int_t*) malloc(size*sizeof(int_t));	
+	if(S->array==NULL) return 0;
+
+	S->size = size;
+	S->top = 0;
+
+return 0;
+}
+
+void stack_push(stack *S, int_t i){
+
+	if(S->top==S->size){
+		S->size += STACK_SIZE;
+		S->array = (int_t*) realloc(S->array, S->size*sizeof(int_t));
+	} 
+
+	S->array[S->top] = i;
+
+	(S->top)++;
+}
+
+int_t stack_top(stack *S){
+
+return S->array[S->top-1];
+}
+
+void stack_pop(stack *S){
+  if(S->top) (S->top)--;
+}
+
+void stack_print(stack *S){
+
+	int_t i;
+
+	for(i=S->top-1; i>0; i--)
+		printf("%d\t(%d)\n", i, S->array[i]);
+	
+	printf("%d\t(%d)\n", i, S->array[i]);
 
 }
 
@@ -179,10 +230,10 @@ int_t i;
 	#endif
 
 	//BWT-inversion and Lyndon array construction
-	stack S;
+	stack_pair S;
 	S.top=0; S.size=STACK_SIZE;
-	stack_init(&S,STACK_SIZE);
-	stack_push(&S, 0, 0);//(0, 0)
+	stack_pair_init(&S,STACK_SIZE);
+	stack_pair_push(&S, 0, 0);//(0, 0)
 
 	#if PRINT
 		printf("step\tpos\tT^{rev}\tLyndon\n");
@@ -195,21 +246,21 @@ int_t i;
 
 	for(i=n-1; i >= 0; i--){	
 
-		while(stack_top(&S).i > pos) stack_pop(&S);
+		while(stack_pair_top(&S).i > pos) stack_pair_pop(&S);
 
 		int_t next = LF[pos];
 
 		#if PERMUTED
-			LA[pos] = step-stack_top(&S).j;
+			LA[pos] = step-stack_pair_top(&S).j;
 		#else
-			LA[i] = step-stack_top(&S).j;
+			LA[i] = step-stack_pair_top(&S).j;
 		#endif
 
 		#if PRINT
-			printf("%d\t%d\t%c\t%d\n", step, pos, bwt[pos], step-stack_top(&S).j);
+			printf("%d\t%d\t%c\t%d\n", step, pos, bwt[pos], step-stack_pair_top(&S).j);
 		#endif
 
-		stack_push(&S, pos, step++);
+		stack_pair_push(&S, pos, step++);
 
 		pos = next; //pos = LF(pos)
 	}
@@ -343,10 +394,10 @@ int_t i;
 	#endif
 
 	//BWT-inversion and Lyndon array construction
-	stack S;
+	stack_pair S;
 	S.top=0; S.size=STACK_SIZE;
-	stack_init(&S,STACK_SIZE);
-	stack_push(&S, 0, 0);//(0, 0)
+	stack_pair_init(&S,STACK_SIZE);
+	stack_pair_push(&S, 0, 0);//(0, 0)
 
 	#if PRINT
 		printf("step\tpos\tT^{rev}\tLyndon\n");
@@ -361,21 +412,21 @@ int_t i;
 
 		s[i] = find_symbol(pos, F, Alpha, sigma);
 		
-		while(stack_top(&S).i > pos) stack_pop(&S);
+		while(stack_pair_top(&S).i > pos) stack_pair_pop(&S);
 
 		int_t next = LF[pos];
 
 		#if PERMUTED
-			LA[pos] = step-stack_top(&S).j;
+			LA[pos] = step-stack_pair_top(&S).j;
 		#else
-			LA[i] = step-stack_top(&S).j;
+			LA[i] = step-stack_pair_top(&S).j;
 		#endif
 
 		#if PRINT
-			printf("%d\t%d\t%c\t%d\n", step, pos, bwt[pos], step-stack_top(&S).j);
+			printf("%d\t%d\t%c\t%d\n", step, pos, bwt[pos], step-stack_pair_top(&S).j);
 		#endif
 
-		stack_push(&S, pos, step++);
+		stack_pair_push(&S, pos, step++);
 
 		pos = next; //pos = LF(pos)
 	}
@@ -460,10 +511,10 @@ int_t i;
 	#endif
 
 	//Lyndon array construction
-	stack S;
+	stack_pair S;
 	S.top=0; S.size=STACK_SIZE;
-	stack_init(&S,STACK_SIZE);
-	stack_push(&S, 0, 0);//(0, 0)
+	stack_pair_init(&S,STACK_SIZE);
+	stack_pair_push(&S, 0, 0);//(0, 0)
 
 	#if PRINT
 		printf("step\tpos\tT^{rev}\tLyndon\n");
@@ -476,16 +527,16 @@ int_t i;
 
 	for(i=n-1; i >= 0; i--){	
 
-		while(stack_top(&S).i > pos) stack_pop(&S);
+		while(stack_pair_top(&S).i > pos) stack_pair_pop(&S);
 		int_t next = LF[pos];
 
 		#if PERMUTED
-			LA[pos] = step-stack_top(&S).j;
+			LA[pos] = step-stack_pair_top(&S).j;
 		#else
-			LA[i] = step-stack_top(&S).j;
+			LA[i] = step-stack_pair_top(&S).j;
 		#endif
 
-		stack_push(&S, pos, step++);
+		stack_pair_push(&S, pos, step++);
 		pos = next; //pos = LF(pos)
 	}
 
@@ -604,23 +655,24 @@ int compute_nsv(int_t* NSV, int_t *array, int_t n){
 	stack S;
 	S.top=0; S.size=STACK_SIZE;
 	stack_init(&S,STACK_SIZE);
-	stack_push(&S, 0, -1);//(idx, value)=(pos, step)
+	stack_push(&S, 0);//(idx, value)=(pos, step)
 
 	int_t i;
-        for(i=n-1; i>0; i--){
+  for(i=n-1; i>0; i--){
 
-                NSV[i] = stack_top(&S).i;
+    NSV[i] = stack_top(&S);
 		
-                if(array[i-1]>array[i]){
-			stack_push(&S, i, array[i]);
-                }
-                else{
-			while(stack_top(&S).j >= array[i-1]) stack_pop(&S);
-                }
-        }
+    if(array[i-1]>array[i]){
+      stack_push(&S, i);
+    }
+    else{
+      //while(stack_top(&S).j >= array[i-1]) stack_pop(&S);
+      while(array[stack_top(&S)] >= array[i-1]) stack_pop(&S);
+    }
+  }
 
-        NSV[0] = stack_top(&S).i;
-	free(S.array);
+  NSV[0] = stack_top(&S);
+  free(S.array);
 
 return 0;
 }
