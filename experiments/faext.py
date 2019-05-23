@@ -13,10 +13,10 @@ Default is single line fasta format
   seq2
   etc
 but one can get the concatenated sequences setting --before="" --after=""
-Note: in --before and --after you can use the python escape sequence "\xhh"
+Note: in --before and --after you can use the python escape sequence "\\xhh"
 to denote a byte with hex value hh. For example, to add a 0x00 byte at the
 begining of each sequence and a 0x01 value followed by a \n at the end of
-each sequence use --before="\x00" --after="\x01\n". The resulting output
+each sequence use --before="\\x00" --after="\\x01\\n". The resulting output
 format will be
   0x00 seq1 0x01
   0x00 seq2 0x01
