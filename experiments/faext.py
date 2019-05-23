@@ -47,8 +47,8 @@ def main():
   parser.add_argument('-l', help="force all seqs of this length (def no)", default=-1, type=int)
   parser.add_argument('-p', help="split single sequences (only with -l)", action="store_true")
   parser.add_argument('-N', help="discard reads containing N bases", action="store_true")
-  parser.add_argument('--before', help='string to prepend to each sequence (def ">\n")', default=">\n", type=str)
-  parser.add_argument('--after', help='string to appped to each sequence (def "\n")', default="\n", type=str)
+  parser.add_argument('--before', help='string to prepend to each sequence (def ">\\n")', default=">\n", type=str)
+  parser.add_argument('--after', help='string to appped to each sequence (def "\\n")', default="\n", type=str)
   parser.add_argument('-v', help="verbose", action='store_true')
   args = parser.parse_args()
   # --- convert \n and \x in before/after
