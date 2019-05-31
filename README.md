@@ -95,7 +95,7 @@ malloc_count ### exiting, total: 24,478, peak: 21,272, current: 1,144
 ## References
 
 \[1\] 
-Louza, F. A., Mantaci, S., Manzini G., Sciortino, M., Telles, G. P.: Inducing the Lyndon Array, arXiv preprint [arXiv:XXXX.XXXX](https://arxiv.org/abs/XXXX.XXXX)
+Louza, F. A., Mantaci, S., Manzini G., Sciortino, M., Telles, G. P.: Inducing the Lyndon Array, arXiv preprint [arXiv:1905.12987](https://arxiv.org/abs/1905.12987)
 
 \[2\] Nong, G., Practical linear-time O(1)-workspace suffix sorting for constant alphabets, ACM Trans. Inform. Syst., vol. 31, no. 3, pp. 1-15, 2013
 
