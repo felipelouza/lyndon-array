@@ -19,6 +19,7 @@
    to file filename.k
    
    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+#define _GNU_SOURCE
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -46,7 +47,7 @@ void usage(char *name) {
 
 int main(int argc, char *argv[])
 {
-  extern char *optarg;
+  //extern char *optarg;
   extern int optind, opterr, optopt;
   char *fnam=NULL;
   FILE *f;
@@ -98,8 +99,9 @@ int main(int argc, char *argv[])
     if(count[i]!=0) tot++;
   // report alphabet
   double entropy = report_alpha(count,n);
+  printf("Number of input symbols: %li\n",n);  
   printf("Number of distinct symbols: %d\n",tot);  
-  printf("Entropy times length: %lf\n",entropy/n); 
+  printf("Entropy: %lf\n",entropy/n); 
 
   // --- remap symbols if requested ---
   if(k>=0) {
