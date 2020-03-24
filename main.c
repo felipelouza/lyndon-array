@@ -71,7 +71,8 @@ void usage(char *name){
   puts("\t-f\tread INPUT as formatted input (txt, fasta or fastq)");
   puts("\t-v\tverbose output");
   puts("\t-o\toutput computed arrays to disk (INPUT.la and INPUT.sa)");
-  puts("\t-s\tcomputes some statistics for LA");
+  puts("\t-s\tcompute some statistics for LA");
+  puts("\t-l\toutput the lyndon-factors (start positions) to (INPUT.pos)");
   puts("Debug options:");
   puts("\t-c\tcheck output (for debug)");
   puts("\t-p P\tprint the output arrays LA[1,P] and SA[1,P] (for debug)");
@@ -89,7 +90,7 @@ clock_t c_start=0;
   extern char *optarg;
   extern int optind, opterr, optopt;
 
-  int c=0, verbose=0, time=0, check=0, print=0, output=0, stats=0;
+  int c=0, verbose=0, time=0, check=0, print=0, output=0, stats=0, factors=0;
   //input options
   int bin=1;// bin or formatted input (txt, fasta and fastq)
   char *c_file=NULL;
@@ -97,7 +98,7 @@ clock_t c_start=0;
   size_t  d=0; //number of documents
   int ALG=10;//Algorithm
 
-  while ((c=getopt(argc, argv, "vthp:d:A:cosbf")) != -1) {
+  while ((c=getopt(argc, argv, "vthp:d:A:cosbfl")) != -1) {
     switch (c)
     {
       case 'v':
@@ -122,6 +123,8 @@ clock_t c_start=0;
         bin=1; break;
       case 'f':
         bin=0; break;
+      case 'l':
+        factors=1; break;
       case '?':
         exit(EXIT_FAILURE);
     }
@@ -357,6 +360,22 @@ clock_t c_start=0;
       fwrite(str, sizeof(unsigned char), n, f_out);
       file_close(f_out);
     }
+  }
+  if(factors){
+    if(!output) printf("OUTPUT:\n");
+    char c_out[255];
+    FILE *f_out = NULL;
+    sprintf(c_out, "%s.pos", c_file);
+    printf("%s\n", c_out);
+    f_out = file_open(c_out, "wb");
+    i=0;
+    char tmp[64];
+    while(i<n){
+      sprintf(tmp, "%lu\n", i);
+      fwrite(tmp, sizeof(char), strlen(tmp), f_out);
+      i+=LA[i];
+    }
+    file_close(f_out);
   }
 
   if(LA && stats){

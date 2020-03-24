@@ -34,7 +34,8 @@ make
 -f	read INPUT as formatted input (txt, fasta or fastq)
 -v	verbose output
 -o	output computed arrays to disk (INPUT.la and INPUT.sa)
--s	computes some statistics for LA
+-s	compute some statistics for LA
+-l  output lyndon-factors (start positions) to (INPUT.pos)");
 -c	check output (for debug)
 -p P	print the output arrays LA[1,P] and SA[1,P] (for debug)
 -h	this help message
