@@ -73,6 +73,7 @@ void usage(char *name){
   puts("\t-o\toutput computed arrays to disk (INPUT.la and INPUT.sa)");
   puts("\t-s\tcompute some statistics for LA");
   puts("\t-l\toutput the lyndon-factors (start positions) to (INPUT.pos)");
+  puts("\t-L\toutput the lyndon-factors (substrings) to (INPUT.lyn)");
   puts("Debug options:");
   puts("\t-c\tcheck output (for debug)");
   puts("\t-p P\tprint the output arrays LA[1,P] and SA[1,P] (for debug)");
@@ -98,7 +99,7 @@ clock_t c_start=0;
   size_t  d=0; //number of documents
   int ALG=10;//Algorithm
 
-  while ((c=getopt(argc, argv, "vthp:d:A:cosbfl")) != -1) {
+  while ((c=getopt(argc, argv, "vthp:d:A:cosbflL")) != -1) {
     switch (c)
     {
       case 'v':
@@ -125,6 +126,8 @@ clock_t c_start=0;
         bin=0; break;
       case 'l':
         factors=1; break;
+      case 'L':
+        factors=2; break;
       case '?':
         exit(EXIT_FAILURE);
     }
@@ -362,20 +365,42 @@ clock_t c_start=0;
     }
   }
   if(factors){
+
     if(!output) printf("OUTPUT:\n");
     char c_out[255];
-    FILE *f_out = NULL;
+    FILE *f_out = NULL, *F_out = NULL;
     sprintf(c_out, "%s.pos", c_file);
     printf("%s\n", c_out);
     f_out = file_open(c_out, "wb");
+
+    if(factors==2){
+      sprintf(c_out, "%s.lyn", c_file);
+      printf("%s\n", c_out);
+      F_out = file_open(c_out, "w");
+    }
+
+    size_t curr;
     i=0;
-    char tmp[64];
+    char tmp[64], l='\n';
     while(i<n){
+      curr=i;
       sprintf(tmp, "%lu\n", i);
       fwrite(tmp, sizeof(char), strlen(tmp), f_out);
+      if(factors==2){
+        size_t j;
+        for(j=curr; j<curr+LA[i]; j++){
+          char c = (str[j]==0)?'#':(str[j]>1?str[j]-1:'$');
+          fwrite(&c, sizeof(unsigned char),1, F_out);
+          //printf("%c", c);
+        }
+        fwrite(&l, sizeof(unsigned char),1, F_out);
+      }
       i+=LA[i];
     }
+
     file_close(f_out);
+    if(factors==2)
+      file_close(F_out);
   }
 
   if(LA && stats){

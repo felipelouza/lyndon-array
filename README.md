@@ -36,6 +36,7 @@ make
 -o	output computed arrays to disk (INPUT.la and INPUT.sa)
 -s	compute some statistics for LA
 -l	output lyndon-factors (start positions) to (INPUT.pos)");
+-L	output lyndon-factors (substrings) to (INPUT.lyn)");
 -c	check output (for debug)
 -p P	print the output arrays LA[1,P] and SA[1,P] (for debug)
 -h	this help message
