@@ -97,20 +97,20 @@ malloc_count ### exiting, total: 24,478, peak: 21,272, current: 1,144
 ## References
 
 \[1\] 
-Louza, F. A., Mantaci, S., Manzini G., Sciortino, M., Telles, G. P.: Inducing the Lyndon Array, arXiv preprint [arXiv:1905.12987](https://arxiv.org/abs/1905.12987)
+Louza, F. A., Mantaci, S., Manzini G., Sciortino, M., Telles, G. P.: Inducing the Lyndon Array, **SPIRE 2019**: 138-151 [link](https://link.springer.com/chapter/10.1007%2F978-3-030-32686-9_10)
 
-\[2\] Nong, G., Practical linear-time O(1)-workspace suffix sorting for constant alphabets, ACM Trans. Inform. Syst., vol. 31, no. 3, pp. 1-15, 2013
+\[2\] Nong, G., Practical linear-time O(1)-workspace suffix sorting for constant alphabets, **ACM Trans. Inform. Syst.**, vol. 31, no. 3, pp. 1-15, 2013
 
-\[3\] Christophe Hohlweg, Christophe Reutenauer: Lyndon words, permutations and trees. Theor. Comput. Sci. 307(1): 173-178 (2003)
+\[3\] Christophe Hohlweg, Christophe Reutenauer: Lyndon words, permutations and trees. **Theor. Comput. Sci.** 307(1): 173-178 (2003)
 
-\[4\] Uwe Baier: Linear-time Suffix Sorting - A New Approach for Suffix Array Construction. CPM 2016: 23:1-23:12 [link](https://doi.org/10.4230/LIPIcs.CPM.2016.23)
+\[4\] Uwe Baier: Linear-time Suffix Sorting - A New Approach for Suffix Array Construction. **CPM 2016**: 23:1-23:12 [link](https://doi.org/10.4230/LIPIcs.CPM.2016.23)
 
 \[5\] Frantisek Franek, A. S. M. Sohidull Islam, Mohammad Sohel Rahman, William F. Smyth:
-Algorithms to Compute the Lyndon Array. Stringology 2016: 172-184
+Algorithms to Compute the Lyndon Array. **Stringology 2016**: 172-184
 
-\[6\] Louza, F. A., Smyth W. F., Manzini G., Telles, G. P.: Lyndon Array Construction during Burrows-Wheeler Inversion, J. Discrete Algorithms, vol. 50, pp. 2-9, 2018 [link](https://www.sciencedirect.com/science/article/pii/S1570866718301254)
+\[6\] Louza, F. A., Smyth W. F., Manzini G., Telles, G. P.: Lyndon Array Construction during Burrows-Wheeler Inversion, **J. Discrete Algorithms**, vol. 50, pp. 2-9, 2018 [link](https://www.sciencedirect.com/science/article/pii/S1570866718301254)
 
-\[7\] Maxime Crochemore, Roberto Grossi, Juha Kärkkäinen, Gad M. Landau: Computing the Burrows-Wheeler transform in place and in small space. J. Discrete Algorithms 32: 44-52 (2015) [link](https://doi.org/10.1016/j.jda.2015.01.004)
+\[7\] Maxime Crochemore, Roberto Grossi, Juha Kärkkäinen, Gad M. Landau: Computing the Burrows-Wheeler transform in place and in small space. **J. Discrete Algorithms** 32: 44-52 (2015) [link](https://doi.org/10.1016/j.jda.2015.01.004)
 
 
 
