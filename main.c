@@ -91,7 +91,7 @@ clock_t c_start=0;
   extern char *optarg;
   extern int optind, opterr, optopt;
 
-  int c=0, verbose=0, time=0, check=0, print=0, output=0, stats=0, factors=0;
+  int c=0, verbose=0, time=0, check=0, print=0, output=0, stats=0, factors=0, subs=0;
   //input options
   int bin=1;// bin or formatted input (txt, fasta and fastq)
   char *c_file=NULL;
@@ -127,7 +127,7 @@ clock_t c_start=0;
       case 'l':
         factors=1; break;
       case 'L':
-        factors=2; break;
+        factors =1; subs=1; break;
       case '?':
         exit(EXIT_FAILURE);
     }
@@ -373,7 +373,7 @@ clock_t c_start=0;
     printf("%s\n", c_out);
     f_out = file_open(c_out, "wb");
 
-    if(factors==2){
+    if(subs==1){
       sprintf(c_out, "%s.lyn", c_file);
       printf("%s\n", c_out);
       F_out = file_open(c_out, "w");
@@ -386,20 +386,22 @@ clock_t c_start=0;
       curr=i;
       sprintf(tmp, "%lu\n", i);
       fwrite(tmp, sizeof(char), strlen(tmp), f_out);
-      if(factors==2){
+      if(subs==1){
         size_t j;
         for(j=curr; j<curr+LA[i]; j++){
-          char c = (str[j]==0)?'#':(str[j]>1?str[j]-1:'$');
+          char c;
+          if(bin) c = str[j];
+          else  c = (str[j]==0)?'#':(str[j]>1?str[j]-1:'$');
           fwrite(&c, sizeof(unsigned char),1, F_out);
           //printf("%c", c);
         }
-        fwrite(&l, sizeof(unsigned char),1, F_out);
+        if(!bin)  fwrite(&l, sizeof(unsigned char),1, F_out);
       }
       i+=LA[i];
     }
 
     file_close(f_out);
-    if(factors==2)
+    if(subs==2)
       file_close(F_out);
   }
 
