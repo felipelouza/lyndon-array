@@ -104,10 +104,10 @@ int less_frequent(unsigned char* str, int n){
   int c = count(str, n, A, C);
 
   int i;
-  int B[255];
+  int B[255], b=0;
   B[0]=0;//terminator symbol
   for(i=c-1; i>=0;i--){
-    B[A[i].symbol]=C[i];
+    B[A[i].symbol]=C[b++];
     printf("B['%c'] = '%c'\n", A[i].symbol, B[A[i].symbol]);
   }
 
