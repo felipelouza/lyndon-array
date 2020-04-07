@@ -435,6 +435,8 @@ clock_t c_start=0;
     printf("Average length: %.2lf\n", (double)n/(double)count);
     printf("Maximum length: % "PRIdN"\n", max);
     printf("##\n");
+
+    fprintf(stderr, "%"PRIdN"\t%.2lf\t%"PRIdN"\n", count, (double)n/(double)count, max);
   }
 
   free(str);

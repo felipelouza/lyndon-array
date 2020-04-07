@@ -27,7 +27,25 @@
 /*******************************************************************/
 
 typedef struct{
-  int symbol;
+  char symbol;
+  int run;
+} t_rle;
+
+int compare_rle(const void * left, const void * right) {
+    const t_rle * a = (const t_rle *) left;
+    const t_rle * b = (const t_rle *) right;
+    if (a->run > b->run) {
+        return -1;
+    } else if (a->run < b->run) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+/*******************************************************************/
+
+typedef struct{
+  char symbol;
   int freq;
 } t_symbol;
 
@@ -41,6 +59,44 @@ int compare(const void * left, const void * right) {
     } else {
         return 0;
     }
+}
+
+/*******************************************************************/
+int rle(unsigned char* str, int n, t_rle *A, int *C){
+
+  int i;
+
+  //init
+  for(i=0; i<255;i++){
+    A[i].run=0;
+    A[i].symbol=i;
+  }
+
+  //count
+  i=0;
+  while(i<n-1){
+    int rle=1;
+    while(str[i]==str[i+rle]) rle++;
+//    printf("%d%c\n", rle, str[i]);
+    if(A[str[i]].run<rle) A[str[i]].run =rle;
+    i=i+rle;
+  }
+
+  int c=0;
+  for(i=0; i<255;i++){
+    if(A[i].run){
+//      printf("%d\t%c\t%d\n", i, A[i].symbol, A[i].run);
+      C[c++]=A[i].symbol;
+    }
+  }
+
+  //sort
+  qsort(A, 255, sizeof(t_rle), compare_rle);
+  for(i=0; i<255;i++)
+    if(A[i].run)
+      printf("%d\t%c\t%d\n", i, A[i].symbol, A[i].run);
+
+return c;
 }
 
 /*******************************************************************/
@@ -118,6 +174,48 @@ int less_frequent(unsigned char* str, int n){
 return 0;
 }
 
+/*******************************************************************/
+int most_rle(unsigned char* str, int n){
+
+  t_rle A[255];
+  int C[255];
+
+  int c = rle(str, n, A, C);
+  int i;
+  int B[255];
+  B[0]=0;//terminator symbol
+  for(i=0; i<c;i++){
+    B[A[i].symbol]=C[i];
+    printf("B['%c'] = '%c'\n", A[i].symbol, B[A[i].symbol]);
+  }
+
+  for(i=0; i<n-1;i++){
+    str[i] = B[str[i]];
+  }
+
+return 0;
+}
+/*******************************************************************/
+int less_rle(unsigned char* str, int n){
+
+  t_rle A[255];
+  int C[255];
+
+  int c = rle(str, n, A, C);
+  int i;
+  int B[255], b=0;
+  B[0]=0;//terminator symbol
+  for(i=c-1; i>=0;i--){
+    B[A[i].symbol]=C[b++];
+    printf("B['%c'] = '%c'\n", A[i].symbol, B[A[i].symbol]);
+  }
+
+  for(i=0; i<n-1;i++){
+    str[i] = B[str[i]];
+  }
+
+return 0;
+}
 /*******************************************************************/
 unsigned char* cat_char(unsigned char** R, size_t d, size_t *n){
 
@@ -280,14 +378,24 @@ int main(int argc, char** argv){
   switch(ALG){
 
     /****/
-    case 1:  printf("## ALG_1 ##\n"); 
+    case 1:  printf("## FREQ (less) ##\n"); 
       less_frequent(str, n);
-      sprintf(ext, "less");
+      sprintf(ext, "freq.less");
       break;
 
-    case 2:  printf("## ALG_2 ##\n"); 
+    case 2:  printf("## FREQ (most) ##\n"); 
       most_frequent(str, n);
-      sprintf(ext, "most");
+      sprintf(ext, "freq.most");
+      break;
+
+    case 3:  printf("## RLE (less) ##\n"); 
+      less_rle(str, n);
+      sprintf(ext, "rle.less");
+      break;
+
+    case 4:  printf("## RLE (most) ##\n"); 
+      most_rle(str, n);
+      sprintf(ext, "rle.most");
       break;
   }
 
