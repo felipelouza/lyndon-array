@@ -378,6 +378,10 @@ int main(int argc, char** argv){
   switch(ALG){
 
     /****/
+    case 0:  printf("## NORMAL ##\n");
+      sprintf(ext, "normal");
+      break;
+
     case 1:  printf("## FREQ (less) ##\n"); 
       less_frequent(str, n);
       sprintf(ext, "freq.less");
