@@ -93,7 +93,7 @@ clock_t c_start=0;
 
   int c=0, verbose=0, time=0, check=0, print=0, output=0, stats=0, factors=0, subs=0;
   //input options
-  int bin=1;// bin or formatted input (txt, fasta and fastq)
+  int bin=0;// bin or formatted (default) input (txt, fasta and fastq)
   char *c_file=NULL;
 
   size_t  d=0; //number of documents
@@ -232,10 +232,13 @@ clock_t c_start=0;
       break;
 
     case 2:  printf("## GSACA_LYN ##\n"); 
-      time_start(&t_start, &c_start);
+      if(time)
+        time_start(&t_start, &c_start);
       gsaca_cl(str, (uint_t*)LA, n);
-      printf("TOTAL:\n");
-      fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
+      if(time){
+        printf("TOTAL:\n");
+        fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
+      }
       break;
 
     case 3:  printf("## MAX_LYN ##\n"); 
@@ -252,45 +255,63 @@ clock_t c_start=0;
 
     /****/
     case 6:  printf("## GSACA_LYN_SA ##\n"); 
-      time_start(&t_start, &c_start);
+      if(time)
+        time_start(&t_start, &c_start);
       gsaca_cl_la(str, (uint_t*)SA, (uint_t*)LA, n);
-      printf("TOTAL:\n");
-      fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
+      if(time){
+        printf("TOTAL:\n");
+        fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
+      }
       break;
     
     case 7:  printf("## SACAK_LYNDON (non-linear) ##\n"); 
-      time_start(&t_start, &c_start);
+      if(time)
+        time_start(&t_start, &c_start);
       sacak_lyndon_9n_non_linear(str, (int_t*)SA, (int_t*)LA, n);
-      printf("TOTAL:\n");
-      fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
+      if(time){
+        printf("TOTAL:\n");
+        fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
+      }
       break;
 
     case 8:  printf("## SACAK_LYNDON 17n (linear) ##\n"); 
-      time_start(&t_start, &c_start);
+      if(time)
+        time_start(&t_start, &c_start);
       sacak_lyndon_17n_linear(str, (int_t*)SA, (int_t*)LA, n);
-      printf("TOTAL:\n");
-      fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
+      if(time){
+        printf("TOTAL:\n");
+        fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
+      }
       break;
     
     case 9:  printf("## SACAK_LYNDON 13n (linear) ##\n"); 
-      time_start(&t_start, &c_start);
+      if(time)
+        time_start(&t_start, &c_start);
       sacak_lyndon_13n_linear(str, (int_t*)SA, (int_t*)LA, n);
-      printf("TOTAL:\n");
-      fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
+      if(time){
+        printf("TOTAL:\n");
+        fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
+      }
       break;
     
     case 10:  printf("## SACAK_LYNDON 9n (linear) ##\n"); 
-      time_start(&t_start, &c_start);
+      if(time)
+        time_start(&t_start, &c_start);
       sacak_lyndon_9n_linear(str, (int_t*)SA, (int_t*)LA, n);
-      printf("TOTAL:\n");
-      fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
+      if(time){
+        printf("TOTAL:\n");
+        fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
+      }
       break;
 
     case 11:  printf("## SACAK 5n (linear) ##\n"); 
-      time_start(&t_start, &c_start);
+      if(time)
+        time_start(&t_start, &c_start);
       sacak(str, (int_t*)SA, n);
-      printf("TOTAL:\n");
-      fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
+      if(time){
+        printf("TOTAL:\n");
+        fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
+      }
       break;
     
     /****/

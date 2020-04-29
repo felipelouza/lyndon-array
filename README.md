@@ -30,8 +30,8 @@ make
 ```sh
 -A a	preferred algorithm to use (default 10)
 -d D	use the first D documents of the INPUT
--b	read INPUT as binary input (default)
--f	read INPUT as formatted input (txt, fasta or fastq)
+-b	read INPUT as binary input 
+-f	read INPUT as (default) formatted input (.txt, .fasta or .fastq)
 -v	verbose output
 -o	output computed arrays to disk (INPUT.la and INPUT.sa)
 -s	compute some statistics for LA

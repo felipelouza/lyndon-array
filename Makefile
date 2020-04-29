@@ -15,8 +15,8 @@ LIBOBJ = \
 	lib/suffix-array.o\
 	lib/lyndon-array.o\
 	external/gsaca_cl/gsaca.o\
-	external/malloc_count/malloc_count.o\
 	sacak-lyndon.o
+#	external/malloc_count/malloc_count.o\
 	
 ##
 M64 = 0

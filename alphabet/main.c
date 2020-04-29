@@ -27,7 +27,7 @@
 /*******************************************************************/
 
 typedef struct{
-  char symbol;
+  unsigned char symbol;
   int run;
 } t_rle;
 
@@ -94,7 +94,7 @@ int rle(unsigned char* str, int n, t_rle *A, int *C){
   qsort(A, 255, sizeof(t_rle), compare_rle);
   for(i=0; i<255;i++)
     if(A[i].run)
-      printf("%d\t%c\t%d\n", i, A[i].symbol, A[i].run);
+      printf("%d\t%d\t%d\n", i, A[i].symbol, A[i].run);
 
 return c;
 }
@@ -118,7 +118,7 @@ int count(unsigned char* str, int n, t_symbol *A, int *C){
   int c=0;
   for(i=0; i<255;i++){
     if(A[i].freq){
-      printf("%d\t%c\t%d\n", i, A[i].symbol, A[i].freq);
+      printf("%d\t%d\t%d\n", i, A[i].symbol, A[i].freq);
       C[c++]=A[i].symbol;
     }
   }
@@ -142,7 +142,7 @@ int most_frequent(unsigned char* str, int n){
   B[0]=0;//terminator symbol
   for(i=0; i<c;i++){
     B[A[i].symbol]=C[i];
-    printf("B['%c'] = '%c'\n", A[i].symbol, B[A[i].symbol]);
+    printf("B['%d'] = '%d'\n", A[i].symbol, B[A[i].symbol]);
   }
 
   for(i=0; i<n-1;i++){
@@ -164,7 +164,7 @@ int less_frequent(unsigned char* str, int n){
   B[0]=0;//terminator symbol
   for(i=c-1; i>=0;i--){
     B[A[i].symbol]=C[b++];
-    printf("B['%c'] = '%c'\n", A[i].symbol, B[A[i].symbol]);
+    printf("B['%d'] = '%d'\n", A[i].symbol, B[A[i].symbol]);
   }
 
   for(i=0; i<n-1;i++){
@@ -186,7 +186,7 @@ int most_rle(unsigned char* str, int n){
   B[0]=0;//terminator symbol
   for(i=0; i<c;i++){
     B[A[i].symbol]=C[i];
-    printf("B['%c'] = '%c'\n", A[i].symbol, B[A[i].symbol]);
+    printf("B['%d'] = '%d'\n", A[i].symbol, B[A[i].symbol]);
   }
 
   for(i=0; i<n-1;i++){
@@ -207,7 +207,7 @@ int less_rle(unsigned char* str, int n){
   B[0]=0;//terminator symbol
   for(i=c-1; i>=0;i--){
     B[A[i].symbol]=C[b++];
-    printf("B['%c'] = '%c'\n", A[i].symbol, B[A[i].symbol]);
+    printf("B['%d'] = '%d'\n", A[i].symbol, B[A[i].symbol]);
   }
 
   for(i=0; i<n-1;i++){
@@ -272,7 +272,7 @@ int main(int argc, char** argv){
 
   int c=0, verbose=0, time=0, print=0, output=1;
   //input options
-  int bin=1;// bin or formatted input (txt, fasta and fastq)
+  int bin=0;// bin or formatted (default) input (txt, fasta and fastq)
   char *c_file=NULL;
 
   size_t  d=0; //number of documents
