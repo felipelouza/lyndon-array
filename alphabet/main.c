@@ -45,6 +45,25 @@ int compare_rle(const void * left, const void * right) {
 /*******************************************************************/
 
 typedef struct{
+  unsigned char c1, c2;
+  int freq;
+} t_2mer;
+
+int compare_2mer(const void * left, const void * right) {
+    const t_2mer * a = (const t_2mer*) left;
+    const t_2mer * b = (const t_2mer *) right;
+    if (a->freq > b->freq) {
+        return -1;
+    } else if (a->freq < b->freq) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+/*******************************************************************/
+
+typedef struct{
   unsigned char symbol;
   int freq;
 } t_symbol;
@@ -130,6 +149,52 @@ return c;
 }
 
 /*******************************************************************/
+int count_2mer(unsigned char* str, int n, t_2mer A[255][255], int *C){
+
+  int i,j;
+
+  //init
+  for(i=0; i<255;i++){
+    for(j=0; j<255; j++){
+      A[i][j].freq=0;
+      A[i][j].c1=i;
+      A[i][j].c2=j;
+    }
+  }
+
+  //count
+  for(i=0; i<n-1;i++){
+    A[str[i]][str[i+1]].freq++;
+  }
+
+  int c=0;
+  for(i=0; i<255;i++){
+    int sum=0;
+    for(j=0; j<255; j++){
+      if(A[i][j].freq){
+        sum++;
+//        printf("%d\t%c%c\t%d\n", i, A[i][j].c1, A[i][j].c2, A[i][j].freq);
+      }
+    }
+    if(sum)
+      C[c++]=i; //A[i].symbol;
+  }
+
+  //sort
+  qsort(A, 255*255, sizeof(t_2mer), compare_2mer);
+
+  for(i=0; i<255;i++){
+    for(j=0; j<255; j++){
+      if(A[i][j].freq==0) break;
+      printf("%d\t%c%c\t%d\n", A[i][j].c2, A[i][j].c1, A[i][j].c2, A[i][j].freq);
+    }
+    if(A[i][j].freq==0) break;
+  }
+
+return c;
+}
+
+/*******************************************************************/
 int most_frequent(unsigned char* str, int n){
 
   t_symbol A[255];
@@ -165,6 +230,111 @@ int less_frequent(unsigned char* str, int n){
   for(i=c-1; i>=0;i--){
     B[A[i].symbol]=C[b++];
     printf("B['%d'] = '%d'\n", A[i].symbol, B[A[i].symbol]);
+  }
+
+  for(i=0; i<n-1;i++){
+    str[i] = B[str[i]];
+  }
+
+return 0;
+}
+
+/*******************************************************************/
+int most_2mer(unsigned char* str, int n){
+
+  t_2mer A[255][255];
+  int B[255];
+  int C[255];
+  int D[255];
+
+  int i,j;
+  for(i=0; i<255;i++)
+    B[i]=0;
+
+  int c = count_2mer(str, n, A, C);
+  printf("%d\n", c);
+
+  int d=0;
+  for(i=0; i<255;i++){
+    for(j=0; j<255; j++){
+      if(A[i][j].freq==0) break;
+
+      if(!B[A[i][j].c2] && A[i][j].c2){
+        D[d++] = A[i][j].c2;
+        B[A[i][j].c2]=1;
+      }
+      /*
+      if(!B[A[i][j].c1] && A[i][j].c1){
+        D[d++] = A[i][j].c1;
+        B[A[i][j].c1]=1;
+      }
+      */
+ //     printf("%d\t%c%c\t%d\n", i, A[i][j].c1, A[i][j].c2, A[i][j].freq);
+    }
+    if(A[i][j].freq==0) break;
+  }
+  if(B[str[0]]==0) D[d++] = str[0];
+
+/*
+  for(i=0; i<d;i++){
+    printf("D['%d'] = '%c' (%d)\n", i, D[i], D[i]);
+  }
+  printf("==\n");
+*/
+  int b=0;
+  B[0]=0;//terminator symbol
+  for(i=0; i<d;i++){
+    B[D[i]]=C[b++];
+    printf("B['%c'] = '%c' (%d)\n", D[i], B[D[i]], B[D[i]]);
+  }
+
+  for(i=0; i<n-1;i++){
+    str[i] = B[str[i]];
+  }
+
+return 0;
+}
+/*******************************************************************/
+int less_2mer(unsigned char* str, int n){
+
+  t_2mer A[255][255];
+  int B[255];
+  int C[255];
+  int D[255];
+
+  int i,j;
+  for(i=0; i<255;i++)
+    B[i]=0;
+
+  int c = count_2mer(str, n, A, C);
+  printf("%d\n", c);
+
+  int d=0;
+  for(i=0; i<255;i++){
+    for(j=0; j<255; j++){
+      if(A[i][j].freq==0) break;
+
+      if(!B[A[i][j].c2] && A[i][j].c2){
+        D[d++] = A[i][j].c2;
+        B[A[i][j].c2]=1;
+      }
+      /*
+      if(!B[A[i][j].c1] && A[i][j].c1){
+        D[d++] = A[i][j].c1;
+        B[A[i][j].c1]=1;
+      }
+      */
+ //     printf("%d\t%c%c\t%d\n", i, A[i][j].c1, A[i][j].c2, A[i][j].freq);
+    }
+    if(A[i][j].freq==0) break;
+  }
+  if(B[str[0]]==0) D[d++] = str[0];
+
+  int b=0;
+  B[0]=0;//terminator symbol
+  for(i=d-1; i>=0;i--){
+    B[D[i]]=C[b++];
+    printf("B['%c'] = '%c' (%d)\n", D[i], B[D[i]], B[D[i]]);
   }
 
   for(i=0; i<n-1;i++){
@@ -400,6 +570,16 @@ int main(int argc, char** argv){
     case 4:  printf("## RLE (most) ##\n"); 
       most_rle(str, n);
       sprintf(ext, "rle.most");
+      break;
+
+    case 5:  printf("## 2MER (less) ##\n"); 
+      less_2mer(str, n);
+      sprintf(ext, "2mer.less");
+      break;
+
+    case 6:  printf("## 2MER (most) ##\n"); 
+      most_2mer(str, n);
+      sprintf(ext, "2mer.most");
       break;
   }
 
