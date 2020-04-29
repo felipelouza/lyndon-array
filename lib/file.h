@@ -12,6 +12,8 @@
 
 
 /*******************************************************************/
+const char *clean_filename_ext(const char *filename);
+
 int file_chdir(char* dir);
 
 FILE* file_open(char *c_file, const char * c_mode);

@@ -12,6 +12,20 @@ const char *get_filename_ext(const char *filename) {
 
 /*******************************************************************/
 
+const char *clean_filename_ext(const char *filename) {
+
+    char *dot = strrchr(filename, '.');
+
+    *dot = '\0';
+
+    if(!dot || dot == filename) return "";
+
+    return filename;
+}
+
+
+/*******************************************************************/
+
 /* Changes to a working directory, where everything will be read
  * from and written to
  */ 

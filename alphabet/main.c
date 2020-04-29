@@ -415,7 +415,7 @@ int main(int argc, char** argv){
     char c_out[255];
     FILE *f_out = NULL;
     printf("OUTPUT:\n");
-    sprintf(c_out, "%s.%s.txt", c_file, ext);
+    sprintf(c_out, "%s.%s.txt", clean_filename_ext(c_file), ext);
     printf("%s\n", c_out);
     f_out = file_open(c_out, "wb");
     fwrite(str, sizeof(unsigned char), n, f_out);
