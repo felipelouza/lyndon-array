@@ -45,7 +45,7 @@ int compare_rle(const void * left, const void * right) {
 /*******************************************************************/
 
 typedef struct{
-  char symbol;
+  unsigned char symbol;
   int freq;
 } t_symbol;
 
