@@ -240,7 +240,7 @@ return 0;
 }
 
 /*******************************************************************/
-int most_2mer(unsigned char* str, int n){
+int break_2mer(unsigned char* str, int n){
 
   t_2mer A[255][255];
   int B[255];
@@ -252,29 +252,33 @@ int most_2mer(unsigned char* str, int n){
     B[i]=0;
 
   int c = count_2mer(str, n, A, C);
-  printf("%d\n", c);
+  printf("Sigma = %d\n", c);
 
   int d=0;
   for(i=0; i<255;i++){
     for(j=0; j<255; j++){
       if(A[i][j].freq==0) break;
 
+      if(A[i][j].c1 == A[i][j].c2) continue; //ignore AA, CC, GG, TT
+
       if(!B[A[i][j].c2] && A[i][j].c2){
         D[d++] = A[i][j].c2;
         B[A[i][j].c2]=1;
       }
-      /*
+      
       if(!B[A[i][j].c1] && A[i][j].c1){
         D[d++] = A[i][j].c1;
         B[A[i][j].c1]=1;
       }
-      */
- //     printf("%d\t%c%c\t%d\n", i, A[i][j].c1, A[i][j].c2, A[i][j].freq);
     }
     if(A[i][j].freq==0) break;
   }
-  if(B[str[0]]==0) D[d++] = str[0];
 
+  if(c!=d){
+    for(i=0; i<c;i++){
+      if(!B[C[i]]) D[d++] = C[i];
+    }
+  }
 /*
   for(i=0; i<d;i++){
     printf("D['%d'] = '%c' (%d)\n", i, D[i], D[i]);
@@ -295,7 +299,7 @@ int most_2mer(unsigned char* str, int n){
 return 0;
 }
 /*******************************************************************/
-int less_2mer(unsigned char* str, int n){
+int extend_2mer(unsigned char* str, int n){
 
   t_2mer A[255][255];
   int B[255];
@@ -314,21 +318,28 @@ int less_2mer(unsigned char* str, int n){
     for(j=0; j<255; j++){
       if(A[i][j].freq==0) break;
 
+      if(A[i][j].c1 == A[i][j].c2) continue; //ignore AA, CC, GG, TT
+
       if(!B[A[i][j].c2] && A[i][j].c2){
         D[d++] = A[i][j].c2;
         B[A[i][j].c2]=1;
       }
-      /*
       if(!B[A[i][j].c1] && A[i][j].c1){
         D[d++] = A[i][j].c1;
         B[A[i][j].c1]=1;
       }
-      */
- //     printf("%d\t%c%c\t%d\n", i, A[i][j].c1, A[i][j].c2, A[i][j].freq);
     }
     if(A[i][j].freq==0) break;
   }
-  if(B[str[0]]==0) D[d++] = str[0];
+  if(c!=d){
+    for(i=0; i<c;i++){
+      if(!B[C[i]]) D[d++] = C[i];
+    }
+  }
+  for(i=0; i<d;i++){
+    printf("D['%d'] = '%c' (%d)\n", i, D[i], D[i]);
+  }
+  printf("==\n");
 
   int b=0;
   B[0]=0;//terminator symbol
@@ -543,7 +554,7 @@ int main(int argc, char** argv){
     printf("sizeof(int) = %zu bytes\n", sizeof(int_t));  
   }
 
-  char ext[10];
+  char ext[20];
 
   switch(ALG){
 
@@ -572,14 +583,14 @@ int main(int argc, char** argv){
       sprintf(ext, "rle.most");
       break;
 
-    case 5:  printf("## 2MER (less) ##\n"); 
-      less_2mer(str, n);
-      sprintf(ext, "2mer.less");
+    case 5:  printf("## 2MER (break) ##\n"); 
+      break_2mer(str, n);
+      sprintf(ext, "2mer.break");
       break;
 
-    case 6:  printf("## 2MER (most) ##\n"); 
-      most_2mer(str, n);
-      sprintf(ext, "2mer.most");
+    case 6:  printf("## 2MER (extend) ##\n"); 
+      extend_2mer(str, n);
+      sprintf(ext, "2mer.extend");
       break;
   }
 
