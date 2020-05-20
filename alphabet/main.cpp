@@ -19,8 +19,8 @@ using namespace std;
 #include "lib/utils.h"
 #include "lib/file.h"
 #include "../external/malloc_count/malloc_count.h"
-#include "remap.h"
-#include "duval.hpp"
+#include "lib/algorithms.h"
+#include "lib/duval.hpp"
 
 #ifndef DEBUG
   #define DEBUG 0 

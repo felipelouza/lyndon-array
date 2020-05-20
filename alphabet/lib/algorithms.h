@@ -1,13 +1,13 @@
-#ifndef REMAP_H
-#define REMAP_H
+#ifndef ALGORITHMS_H
+#define ALGORITHMS_H
 
 #include <stdio.h>
 #include <errno.h>
 #include <time.h>
 #include <limits.h>
 
-#include "lib/utils.h"
-#include "lib/file.h"
+#include "utils.h"
+#include "file.h"
 
 #ifndef DEBUG
   #define DEBUG 0 

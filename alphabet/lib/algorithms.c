@@ -1,34 +1,6 @@
-/*
- * Alphabet reordering
- *
- * Authors: Felipe A. Louza and Marcelo K. Albertini
- * contact: louza@ufu.br
- * 30/03/2020
- *
- */
-
-#include <stdio.h>
-#include <errno.h>
-#include <time.h>
-#include <limits.h>
-
-#include "lib/utils.h"
-#include "lib/file.h"
-
-#ifndef DEBUG
-  #define DEBUG 0 
-#endif
-
-#ifndef CAT 
-  #define CAT 0 
-#endif
+#include "algorithms.h"
 
 /*******************************************************************/
-
-typedef struct{
-  unsigned char symbol;
-  int run;
-} t_rle;
 
 int compare_rle(const void * left, const void * right) {
     const t_rle * a = (const t_rle *) left;
@@ -42,11 +14,6 @@ int compare_rle(const void * left, const void * right) {
     }
 }
 /*******************************************************************/
-
-typedef struct{
-  unsigned char c1, c2;
-  int freq;
-} t_2mer;
 
 int compare_2mer(const void * left, const void * right) {
     const t_2mer * a = (const t_2mer*) left;
@@ -62,10 +29,6 @@ int compare_2mer(const void * left, const void * right) {
 
 /*******************************************************************/
 
-typedef struct{
-  unsigned char symbol;
-  int freq;
-} t_symbol;
 
 int compare(const void * left, const void * right) {
     const t_symbol * a = (const t_symbol *) left;

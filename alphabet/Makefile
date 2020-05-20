@@ -11,8 +11,8 @@ ALG = 1
 LIBOBJ = \
 	lib/utils.o\
 	lib/file.o\
-	remap.o\
-	duval.o\
+	lib/algorithms.o\
+	lib/duval.o\
 	../external/malloc_count/malloc_count.o
 	
 ##
