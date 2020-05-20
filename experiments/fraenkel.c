@@ -49,7 +49,7 @@ int main(int argc, char *argv[]){
   size_t i=0;
   for(;i<size-1;i++){
     //T[i]=n-T[i]+1;
-    T[i]='A'+n-T[i]+1;
+    T[i]='A'+n-T[i];
     #if DEBUG
       printf("%d|", T[i]);
     #endif

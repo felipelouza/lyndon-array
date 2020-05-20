@@ -169,11 +169,10 @@ clock_t c_start=0;
     printf("N = %zu bytes\n", n);
     printf("sizeof(int) = %zu bytes\n", sizeof(int_t));
 
-
     #if DEBUG
       printf("R:\n");
       for(i=0; i<d; i++)
-        printf("%" PRIdN ") %s (%zu)\n", i, R[i], strlen((char*)R[i]));
+        printf("%zu) %s (%zu)\n", i, R[i], strlen((char*)R[i]));
     #endif
 
     //free memory
@@ -444,7 +443,7 @@ clock_t c_start=0;
     max=0;
     while(i<n){
       #if DEBUG
-      printf("%d\t%d\n", i, LA[i]);
+      printf("%zu\t%d\n", i, LA[i]);
       #endif
       count++;
       if(LA[i]>max) max=LA[i];

@@ -12,9 +12,8 @@
 #include <time.h>
 #include <limits.h>
 
-#include "../lib/utils.h"
-#include "../lib/file.h"
-#include "../external/malloc_count/malloc_count.h"
+#include "lib/utils.h"
+#include "lib/file.h"
 
 #ifndef DEBUG
   #define DEBUG 0 
@@ -111,9 +110,12 @@ int rle(unsigned char* str, int n, t_rle *A, int *C){
 
   //sort
   qsort(A, 255, sizeof(t_rle), compare_rle);
+
+  #if DEBUG
   for(i=0; i<255;i++)
     if(A[i].run)
       printf("%d\t%d\t%d\n", i, A[i].symbol, A[i].run);
+  #endif
 
 return c;
 }
@@ -137,7 +139,9 @@ int count(unsigned char* str, int n, t_symbol *A, int *C){
   int c=0;
   for(i=0; i<255;i++){
     if(A[i].freq){
+      #if DEBUG
       printf("%d\t%d\t%d\n", i, A[i].symbol, A[i].freq);
+      #endif
       C[c++]=A[i].symbol;
     }
   }
@@ -186,7 +190,9 @@ int count_2mer(unsigned char* str, int n, t_2mer A[255][255], int *C){
   for(i=0; i<255;i++){
     for(j=0; j<255; j++){
       if(A[i][j].freq==0) break;
+      #if DEBUG
       printf("%d\t%c%c\t%d\n", A[i][j].c2, A[i][j].c1, A[i][j].c2, A[i][j].freq);
+      #endif
     }
     if(A[i][j].freq==0) break;
   }
@@ -207,7 +213,9 @@ int most_frequent(unsigned char* str, int n){
   B[0]=0;//terminator symbol
   for(i=0; i<c;i++){
     B[A[i].symbol]=C[i];
+    #if DEBUG
     printf("B['%d'] = '%d'\n", A[i].symbol, B[A[i].symbol]);
+    #endif
   }
 
   for(i=0; i<n-1;i++){
@@ -229,7 +237,9 @@ int less_frequent(unsigned char* str, int n){
   B[0]=0;//terminator symbol
   for(i=c-1; i>=0;i--){
     B[A[i].symbol]=C[b++];
+    #if DEBUG
     printf("B['%d'] = '%d'\n", A[i].symbol, B[A[i].symbol]);
+    #endif
   }
 
   for(i=0; i<n-1;i++){
@@ -252,7 +262,9 @@ int break_2mer(unsigned char* str, int n){
     B[i]=0;
 
   int c = count_2mer(str, n, A, C);
+  #if DEBUG
   printf("Sigma = %d\n", c);
+  #endif
 
   int d=0;
   for(i=0; i<255;i++){
@@ -289,7 +301,9 @@ int break_2mer(unsigned char* str, int n){
   B[0]=0;//terminator symbol
   for(i=0; i<d;i++){
     B[D[i]]=C[b++];
+    #if DEBUG
     printf("B['%c'] = '%c' (%d)\n", D[i], B[D[i]], B[D[i]]);
+    #endif
   }
 
   for(i=0; i<n-1;i++){
@@ -311,7 +325,9 @@ int extend_2mer(unsigned char* str, int n){
     B[i]=0;
 
   int c = count_2mer(str, n, A, C);
+  #if DEBUG
   printf("%d\n", c);
+  #endif
 
   int d=0;
   for(i=0; i<255;i++){
@@ -336,16 +352,20 @@ int extend_2mer(unsigned char* str, int n){
       if(!B[C[i]]) D[d++] = C[i];
     }
   }
+  #if DEBUG
   for(i=0; i<d;i++){
     printf("D['%d'] = '%c' (%d)\n", i, D[i], D[i]);
   }
   printf("==\n");
+  #endif
 
   int b=0;
   B[0]=0;//terminator symbol
   for(i=d-1; i>=0;i--){
     B[D[i]]=C[b++];
+    #if DEBUG
     printf("B['%c'] = '%c' (%d)\n", D[i], B[D[i]], B[D[i]]);
+    #endif
   }
 
   for(i=0; i<n-1;i++){
@@ -367,7 +387,9 @@ int most_rle(unsigned char* str, int n){
   B[0]=0;//terminator symbol
   for(i=0; i<c;i++){
     B[A[i].symbol]=C[i];
+    #if DEBUG
     printf("B['%d'] = '%d'\n", A[i].symbol, B[A[i].symbol]);
+    #endif
   }
 
   for(i=0; i<n-1;i++){
@@ -388,7 +410,9 @@ int less_rle(unsigned char* str, int n){
   B[0]=0;//terminator symbol
   for(i=c-1; i>=0;i--){
     B[A[i].symbol]=C[b++];
+    #if DEBUG
     printf("B['%d'] = '%d'\n", A[i].symbol, B[A[i].symbol]);
+    #endif
   }
 
   for(i=0; i<n-1;i++){
@@ -398,223 +422,3 @@ int less_rle(unsigned char* str, int n){
 return 0;
 }
 /*******************************************************************/
-unsigned char* cat_char(unsigned char** R, size_t d, size_t *n){
-
-  (*n)++; //add 0 at the end
-
-  int_t i, j;
-  int_t l=0;
-  unsigned char *str = (unsigned char*) malloc((*n)*sizeof(unsigned char));
-
-  for(i=0; i<d; i++){
-    int_t m = strlen((char*)R[i]);
-    for(j=0; j<m; j++){
-      if(R[i][j]<255) str[l++] = R[i][j];
-    }
-#if CAT == 1
-    str[l++] = 1; //add 1 as separator
-#endif
-  }
-
-  str[l++]=0;
-  if(*n>l){
-    str = (unsigned char*) realloc(str, (l)*sizeof(unsigned char)); 
-  }
-  *n = l;
-
-return str;
-}
-
-/*******************************************************************/
-
-
-void usage(char *name){
-//  printf("lyndon-array:\n\tUsage: %s [options] FILE \n\n",name);
-//  puts("Computes the Lyndon-array of FILE");
-//  puts("Output:\tLyndon-array (and Suffix-array)\n");
-  puts("Available options:");
-  puts("\t-A a\tpreferred algorithm to use (default 10)");
-  puts("\t-d D\tuse the first D documents of the INPUT");
-  puts("\t-b\tread INPUT as binary input (default)");
-  puts("\t-f\tread INPUT as formatted input (txt, fasta or fastq)");
-  puts("\t-v\tverbose output");
-  puts("Debug options:");
-  puts("\t-h\tthis help message");
-  exit(EXIT_FAILURE);
-}
-
-/*******************************************************************/
-
-int main(int argc, char** argv){
-
-
-  extern char *optarg;
-  extern int optind, opterr, optopt;
-
-  int c=0, verbose=0, time=0, print=0, output=1;
-  //input options
-  int bin=0;// bin or formatted (default) input (txt, fasta and fastq)
-  char *c_file=NULL;
-
-  size_t  d=0; //number of documents
-  int ALG=1;//Algorithm
-
-  while ((c=getopt(argc, argv, "vthpd:A:cosbflL")) != -1) {
-    switch (c)
-    {
-      case 'v':
-        verbose++; break;
-      case 't':
-        time++; break;
-      case 'p':
-        print++; break;
-      case 'h':
-        usage(argv[0]); break;       // show usage and stop
-      case 'd':
-        d=(size_t)atoi(optarg); break;
-      case 'A':
-        ALG=(size_t)atoi(optarg); break;
-      case 'o':
-        output++; break;
-      case 'b':
-        bin=1; break;
-      case 'f':
-        bin=0; break;
-      case '?':
-        exit(EXIT_FAILURE);
-    }
-  }
-  free(optarg);
-  
-  if(optind+1==argc) {
-    c_file=argv[optind++];
-  }
-  else  usage(argv[0]);
-
-  if(verbose>0) {
-    puts("Command line:");
-    int i;
-    for(i=0;i<argc;i++)
-      printf(" %s",argv[i]);
-    puts("");
-  }
-
-  /********/
-  unsigned char *str = NULL;
-  size_t i, n=0;
-
-  if(bin==0){
-    // reading the input as a collection of documents
-    unsigned char **R;
-
-    //disk access
-    R = (unsigned char**) file_load_multiple(c_file, &d, &n);
-    if(!R){
-      fprintf(stderr, "Error: less than %zu strings in %s\n", d, c_file);
-      return 0;
-    }
-
-    //concatenate strings
-    str = cat_char(R, d, &n);
-
-    printf("d = %zu\n", d);
-    printf("N = %zu bytes\n", n);
-    printf("sizeof(int) = %zu bytes\n", sizeof(int_t));
-
-
-    #if DEBUG
-      printf("R:\n");
-      for(i=0; i<d; i++)
-        printf("%" PRIdN ") %s (%zu)\n", i, R[i], strlen((char*)R[i]));
-    #endif
-
-    //free memory
-    for(i=0; i<d; i++)
-      free(R[i]);
-    free(R);
-  }
-  else{ //bin
-    // reading the input file as a single document
-    FILE *f = fopen(c_file,"r");
-    if(f==NULL) {perror("Cannot open input file"); exit(1);}
-    int e = fseek(f,0,SEEK_END);
-    if(e)  {perror("Cannot seek"); exit(1);}
-    n = ftell(f);
-    rewind(f);
-
-    str = malloc((n+1)*sizeof(unsigned char));
-    if(str==NULL) {perror("Cannot alloc"); exit(1);}
-
-    e = fread(str,1,n,f);
-    if(e!=n) if(f==NULL) {perror("Cannot read from input file"); exit(1);}
-    str[n++] = 0; // terminator 
-
-    (void) d;
-    printf("N = %zu bytes\n", n);
-    printf("sizeof(int) = %zu bytes\n", sizeof(int_t));  
-  }
-
-  char ext[20];
-
-  switch(ALG){
-
-    /****/
-    case 0:  printf("## NORMAL ##\n");
-      sprintf(ext, "normal");
-      break;
-
-    case 1:  printf("## FREQ (less) ##\n"); 
-      less_frequent(str, n);
-      sprintf(ext, "freq.less");
-      break;
-
-    case 2:  printf("## FREQ (most) ##\n"); 
-      most_frequent(str, n);
-      sprintf(ext, "freq.most");
-      break;
-
-    case 3:  printf("## RLE (less) ##\n"); 
-      less_rle(str, n);
-      sprintf(ext, "rle.less");
-      break;
-
-    case 4:  printf("## RLE (most) ##\n"); 
-      most_rle(str, n);
-      sprintf(ext, "rle.most");
-      break;
-
-    case 5:  printf("## 2MER (break) ##\n"); 
-      break_2mer(str, n);
-      sprintf(ext, "2mer.break");
-      break;
-
-    case 6:  printf("## 2MER (extend) ##\n"); 
-      extend_2mer(str, n);
-      sprintf(ext, "2mer.extend");
-      break;
-  }
-
-  if(print){
-    for(i=0; i<n-1;i++){
-      printf("%c", str[i]);
-    }
-    printf("\n");
-  }
-
-  if(output){
-
-    char c_out[255];
-    FILE *f_out = NULL;
-    printf("OUTPUT:\n");
-    sprintf(c_out, "%s.%s.txt", clean_filename_ext(c_file), ext);
-    printf("%s\n", c_out);
-    f_out = file_open(c_out, "wb");
-    fwrite(str, sizeof(unsigned char), n, f_out);
-    file_close(f_out);
-  }
-
-  free(str);
-
-return 0;
-}
-

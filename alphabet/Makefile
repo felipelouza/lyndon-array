@@ -1,4 +1,4 @@
-CC = gcc
+CC = g++
 CFLAGS += -Wall 
 #CFLAGS += -g -O0
 CFLAGS += -D_FILE_OFFSET_BITS=64 -m64 -O3 -fomit-frame-pointer -Wno-char-subscripts 
@@ -9,8 +9,10 @@ INPUT = ../dataset/input.100.txt
 ALG = 1
 
 LIBOBJ = \
-	../lib/utils.o\
-	../lib/file.o\
+	lib/utils.o\
+	lib/file.o\
+	remap.o\
+	duval.o\
 	../external/malloc_count/malloc_count.o
 	
 ##
@@ -25,10 +27,10 @@ CFLAGS += $(DEFINES)
 all: main 
 
 clean:
-	\rm -f *.o ../*.o ../external/*.o ../lib/*o remap 
+	\rm -f *.o ../external/*.o lib/*o remap 
 
-main: main.c ${LIBOBJ} 
-	$(CC) -o remap main.c ${LIBOBJ} $(CFLAGS) $(LFLAGS) 
+main: main.cpp ${LIBOBJ} 
+	$(CC) -o remap main.cpp ${LIBOBJ} $(CFLAGS) $(LFLAGS) 
 
 run:
 	./remap $(INPUT) -A $(ALG)

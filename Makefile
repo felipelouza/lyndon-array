@@ -15,8 +15,8 @@ LIBOBJ = \
 	lib/suffix-array.o\
 	lib/lyndon-array.o\
 	external/gsaca_cl/gsaca.o\
-	sacak-lyndon.o
-#	external/malloc_count/malloc_count.o\
+	sacak-lyndon.o\
+	external/malloc_count/malloc_count.o
 	
 ##
 M64 = 0
@@ -35,7 +35,7 @@ CFLAGS += $(DEFINES)
 all: main 
 
 clean:
-	\rm -f *.o ../*.o ../external/*.o lib/*o main 
+	\rm -f *.o ../*.o ../external/*.o external/malloc_count/malloc_count.o lib/*o main 
 
 main: main.c ${LIBOBJ} 
 	$(CC) -o main main.c ${LIBOBJ} $(CFLAGS) $(LFLAGS) 
