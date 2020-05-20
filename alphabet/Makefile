@@ -1,7 +1,7 @@
 CC = g++
 CFLAGS += -Wall 
 #CFLAGS += -g -O0
-CFLAGS += -D_FILE_OFFSET_BITS=64 -m64 -O3 -fomit-frame-pointer -Wno-char-subscripts 
+CFLAGS += -D_FILE_OFFSET_BITS=64 -m64 -O3 -fomit-frame-pointer -Wno-char-subscripts -std=c++11
 
 LFLAGS = -lm -lrt -ldl
 
