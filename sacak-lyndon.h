@@ -1,13 +1,7 @@
 /* 
- * Authors: Felipe A. Louza, Simon Gog, Guilherme P. Telles
- * contact: louza@ic.unicamp.br
- * 22/03/2017
- */
-
-/* 
- * This code is a modification of SACA-K algorithm by G. Nong, which can be
- * retrieved at: http://code.google.com/p/ge-nong/ 
- *
+ * Authors: Felipe A. Louza
+ * contact: louza@ufu.br
+ * 01/06/2019
  */
 
 #ifndef SACA_K_H
