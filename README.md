@@ -68,7 +68,7 @@ _Notes:_
 **Run a test:**
 
 ```c
-./main dataset/input.txt -A 10 -p 10
+./lyndon-array dataset/input.txt -A 10 -p 10
 ```
 
 **Output:**
