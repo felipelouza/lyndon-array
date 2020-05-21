@@ -12,6 +12,7 @@
 #include <ctime>
 #include <climits>
 
+#include <iostream>
 #include <vector>
 
 using namespace std;
@@ -73,6 +74,7 @@ void usage(char *name){
   puts("\t-f\tread INPUT as formatted input (txt, fasta or fastq)");
   puts("\t-o\toutput converted file");
   puts("\t-s\tcompute some statistics for Lyndon Factors");
+  puts("\t-l\toutput the lyndon-factors (start positions) to (INPUT.pos)");
   puts("\t-L\toutput the lyndon-factors (substrings) to (INPUT.lyn)");
   puts("\t-v\tverbose output");
   puts("Debug options:");
@@ -88,7 +90,7 @@ int main(int argc, char** argv){
   extern char *optarg;
   extern int optind; //, opterr, optopt;
 
-  int c=0, verbose=0, time=0, print=0, output=0, stats=1, factors=0;
+  int c=0, verbose=0, time=0, print=0, output=0, stats=1, factors=0, pos=0;
   //input options
   int bin=0;// bin or formatted (default) input (txt, fasta and fastq)
   char *c_file=NULL;
@@ -96,7 +98,7 @@ int main(int argc, char** argv){
   size_t  d=0; //number of documents
   int ALG=0;//Algorithm
 
-  while ((c=getopt(argc, argv, "vthpd:A:cosbfL")) != -1) {
+  while ((c=getopt(argc, argv, "vthpd:A:cosbflL")) != -1) {
     switch (c)
     {
       case 'v':
@@ -113,6 +115,8 @@ int main(int argc, char** argv){
         ALG=(size_t)atoi(optarg); break;
       case 'o':
         output++; break;
+      case 'l':
+        pos++; break; //outputs Lyndon factors positions
       case 'L':
         factors++; break; //outputs Lyndon factors
       case 's':
@@ -201,7 +205,6 @@ int main(int argc, char** argv){
 
     /****/
     case 0:  printf("## NONE ##\n");//no alphabet reordering
-      sprintf(ext, "none");
       break;
 
     case 1:  printf("## FREQ (less) ##\n"); 
@@ -279,11 +282,43 @@ int main(int argc, char** argv){
     fprintf(stderr, "%zu\t%.2lf\t%zu\n", count, (double)n/(double)count, max);
   }
 
+  if(pos || factors || output)
+    printf("OUTPUT:\n");
+
+  if(pos){
+    char c_out[255];
+    FILE *f_out = NULL;
+
+    if(ALG)
+      sprintf(c_out, "%s.%s.pos", c_file, ext);
+    else
+      sprintf(c_out, "%s.pos", c_file);
+
+    printf("%s\n", c_out);
+    f_out = file_open(c_out, "wb");
+    vector<size_t> R = duval(str, n);
+    
+    char tmp[64];
+    sprintf(tmp, "%u\n", 0);
+    fwrite(tmp, sizeof(char), strlen(tmp), f_out);        
+
+    for(auto it = R.begin(); it!=R.end()-1; it++){
+        pos = *it;
+        sprintf(tmp, "%lu\n", *it);
+        fwrite(tmp, sizeof(char), strlen(tmp), f_out);        
+    }
+    file_close(f_out);
+  }
+
   if(factors){
     char c_out[255];
     FILE *f_out = NULL;
-    printf("OUTPUT:\n");
-    sprintf(c_out, "%s.%s.lyn", c_file, ext);
+
+    if(ALG)
+      sprintf(c_out, "%s.%s.lyn", c_file, ext);
+    else
+      sprintf(c_out, "%s.lyn", c_file);
+
     printf("%s\n", c_out);
     f_out = file_open(c_out, "wb");
     vector<size_t> R = duval(str, n);
@@ -298,11 +333,10 @@ int main(int argc, char** argv){
     file_close(f_out);
   }
 
-  if(output){
+  if(output && ALG){
 
     char c_out[255];
     FILE *f_out = NULL;
-    printf("OUTPUT:\n");
     sprintf(c_out, "%s.%s.txt", clean_filename_ext(c_file), ext);
     printf("%s\n", c_out);
     f_out = file_open(c_out, "wb");
