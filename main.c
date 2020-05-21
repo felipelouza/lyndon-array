@@ -19,7 +19,7 @@
 #include "lib/suffix-array.h"
 #include "external/gsaca_cl/gsaca.h"
 #include "external/malloc_count/malloc_count.h"
-#include "sacak-lyndon.h"
+#include "external/sacak-lyndon.h"
 
 #ifndef DEBUG
   #define DEBUG 0 
@@ -85,8 +85,8 @@ void usage(char *name){
 
 int main(int argc, char** argv){
 
-time_t t_start=0;
-clock_t c_start=0;
+  time_t t_start=0;
+  clock_t c_start=0;
 
   extern char *optarg;
   extern int optind, opterr, optopt;

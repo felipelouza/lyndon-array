@@ -67,7 +67,6 @@ void usage(char *name){
 //  puts("Computes the Lyndon-array of FILE");
 //  puts("Output:\tLyndon-array (and Suffix-array)\n");
   puts("Available options:");
-  puts("\t-p\tprint Lyndon Factors (stdio)");
   puts("\t-A a\tpreferred algorithm to use (default 10)");
   puts("\t-d D\tuse the first D documents of the INPUT");
   puts("\t-b\tread INPUT as binary input (default)");
@@ -78,6 +77,7 @@ void usage(char *name){
   puts("\t-L\toutput the lyndon-factors (substrings) to (INPUT.lyn)");
   puts("\t-v\tverbose output");
   puts("Debug options:");
+  puts("\t-p P\tprint the first P Lyndon factors (for debug)");
   puts("\t-h\tthis help message");
   exit(EXIT_FAILURE);
 }
@@ -86,11 +86,14 @@ void usage(char *name){
 
 int main(int argc, char** argv){
 
+  time_t t_start=0;
+  clock_t c_start=0;
 
   extern char *optarg;
   extern int optind; //, opterr, optopt;
 
-  int c=0, verbose=0, time=0, print=0, output=0, stats=1, factors=0, pos=0;
+  int c=0, verbose=0, time=0, output=0, stats=1, factors=0, pos=0;
+  size_t print=0; 
   //input options
   int bin=0;// bin or formatted (default) input (txt, fasta and fastq)
   char *c_file=NULL;
@@ -98,7 +101,7 @@ int main(int argc, char** argv){
   size_t  d=0; //number of documents
   int ALG=0;//Algorithm
 
-  while ((c=getopt(argc, argv, "vthpd:A:cosbflL")) != -1) {
+  while ((c=getopt(argc, argv, "vthp:A:cosbflL")) != -1) {
     switch (c)
     {
       case 'v':
@@ -106,7 +109,7 @@ int main(int argc, char** argv){
       case 't':
         time++; break;
       case 'p':
-        print++; break;
+        print=(size_t)atoi(optarg); break;
       case 'h':
         usage(argv[0]); break;       // show usage and stop
       case 'd':
@@ -238,13 +241,25 @@ int main(int argc, char** argv){
       break;
   }
 
-  if(stats){
+  if(time) time_start(&t_start, &c_start);
+
+  vector<size_t> R;
+  if(stats || pos || factors || output){
+    R = duval(str, n);
+  }
+
+  if(time){
+    printf("TOTAL:\n");
+    fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
+  }
+
+
+  if(stats || print){
 
     #if DEBUG
     printf("%s\n", str);
     #endif
 
-    vector<size_t> R = duval(str, n);
     size_t prev=0, max=0, count=0;
 
     if(print)
@@ -258,13 +273,15 @@ int main(int argc, char** argv){
       count++;
 
       if(print){
-        #if DEBUG
-        printf("s[%zu..%zu] = \t", prev, *it-1);
-        #endif
-        for(size_t i=prev; i<*it;i++){
-          printf("%c", str[i]);
+        if(count<=print){
+          #if DEBUG
+          printf("s[%zu..%zu] = \t", prev, *it-1);
+          #endif
+          for(size_t i=prev; i<*it;i++){
+            printf("%c", str[i]);
+          }
+          printf("\n");
         }
-        printf("\n");
       }
 
       prev = *it;
@@ -296,7 +313,6 @@ int main(int argc, char** argv){
 
     printf("%s\n", c_out);
     f_out = file_open(c_out, "wb");
-    vector<size_t> R = duval(str, n);
     
     char tmp[64];
     sprintf(tmp, "%u\n", 0);
@@ -321,7 +337,7 @@ int main(int argc, char** argv){
 
     printf("%s\n", c_out);
     f_out = file_open(c_out, "wb");
-    vector<size_t> R = duval(str, n);
+
     char endl = '\n';
     size_t prev=0;
     for(auto it = R.begin(); it!=R.end(); it++){

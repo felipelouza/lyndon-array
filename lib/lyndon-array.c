@@ -1,5 +1,5 @@
 #include "lyndon-array.h"
-#include "../sacak-lyndon.h"
+#include "../external/sacak-lyndon.h"
 
 //get bwt[i] 
 #define bwt(i) ((SA[i])?s[SA[i]-1]:0)

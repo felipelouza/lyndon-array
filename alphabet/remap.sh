@@ -3,7 +3,7 @@
 dir="remap-results"
 
 D="pizzachili"
-ext=(".txt" ".freq.most.txt" ".freq.less.txt" ".rle.most.txt" ".rle.less.txt")
+ext=(".txt")
 
 mkdir -p ${dir}
 
@@ -18,11 +18,13 @@ do
   date >> ${dir}/${test}.out
   echo "####";
 
-  for j in {3..4}
+  j = 0
+
+  for a in {0..6}
   do
     echo ${D}/${A[$i]}${ext[$j]}
-    echo "./lyndon -A 2 -f ${D}/${A[$i]}${ext[$j]}" >> remap-results/${test}.out;
-    ./lyndon -A 2 -s  -f ${D}/${A[$i]}${ext[$j]} >> remap-results/${test}.out;
+    echo "./remap -A $a  ${D}/${A[$i]}${ext[$j]}" >> remap-results/${test}.out;
+    ./remap -A $a  ${D}/${A[$i]}${ext[$j]} >> remap-results/${test}.out;
   done;
 
 done;

@@ -15,7 +15,7 @@ LIBOBJ = \
 	lib/suffix-array.o\
 	lib/lyndon-array.o\
 	external/gsaca_cl/gsaca.o\
-	sacak-lyndon.o\
+	external/sacak-lyndon.o\
 	external/malloc_count/malloc_count.o
 	
 ##
@@ -35,13 +35,13 @@ CFLAGS += $(DEFINES)
 all: main 
 
 clean:
-	\rm -f *.o ../*.o ../external/*.o external/malloc_count/malloc_count.o lib/*o main 
+	\rm -f *.o ../*.o ../external/*.o external/malloc_count/malloc_count.o lib/*o lyndon-array 
 
 main: main.c ${LIBOBJ} 
-	$(CC) -o main main.c ${LIBOBJ} $(CFLAGS) $(LFLAGS) 
+	$(CC) -o lyndon-array main.c ${LIBOBJ} $(CFLAGS) $(LFLAGS) 
 
 run:
-	./main $(INPUT) -A $(ALG)
+	./lyndon-array $(INPUT) -A $(ALG)
 
 valgrind:
-	valgrind --tool=memcheck --leak-check=full --track-origins=yes ./main $(INPUT) -A $(ALG)
+	valgrind --tool=memcheck --leak-check=full --track-origins=yes ./lyndon-array $(INPUT) -A $(ALG)
