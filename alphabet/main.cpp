@@ -19,7 +19,6 @@ using namespace std;
 
 #include "lib/utils.h"
 #include "lib/file.h"
-#include "../external/malloc_count/malloc_count.h"
 #include "lib/algorithms.h"
 #include "lib/duval.hpp"
 
