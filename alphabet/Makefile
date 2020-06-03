@@ -1,7 +1,7 @@
 CC = g++
 CFLAGS += -Wall 
 #CFLAGS += -g -O0
-CFLAGS += -D_FILE_OFFSET_BITS=64 -m64 -O3 -fomit-frame-pointer -Wno-char-subscripts -std=c++11
+CFLAGS += -D_FILE_OFFSET_BITS=64 -m64 -O3 -fomit-frame-pointer -Wno-char-subscripts -std=c++0x
 
 LFLAGS = -lm -lrt -ldl
 
@@ -12,7 +12,8 @@ LIBOBJ = \
 	lib/utils.o\
 	lib/file.o\
 	lib/algorithms.o\
-	lib/duval.o
+	lib/duval.o\
+	lib/random.o
 	
 ##
 M64 = 0

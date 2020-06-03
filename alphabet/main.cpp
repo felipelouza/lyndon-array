@@ -21,6 +21,7 @@ using namespace std;
 #include "lib/file.h"
 #include "lib/algorithms.h"
 #include "lib/duval.hpp"
+#include "lib/random.hpp"
 
 #ifndef DEBUG
   #define DEBUG 0 
@@ -237,6 +238,11 @@ int main(int argc, char** argv){
     case 6:  printf("## 2MER (extend) ##\n"); 
       extend_2mer(str, n);
       sprintf(ext, "2mer.extend");
+      break;
+
+    case 7:  printf("## RANDOM ##\n"); 
+      random(str, n, verbose);
+      sprintf(ext, "random");
       break;
   }
 

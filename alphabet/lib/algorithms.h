@@ -13,10 +13,6 @@
   #define DEBUG 0 
 #endif
 
-#ifndef CAT 
-  #define CAT 0 
-#endif
-
 /*******************************************************************/
 
 typedef struct{
