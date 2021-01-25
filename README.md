@@ -117,3 +117,9 @@ Algorithms to Compute the Lyndon Array. **Stringology 2016**: 172-184
 ## Thanks
 
 Thanks to [Uwe Baier](https://github.com/waYne1337/) for kindly providing the source codes for GSACA_LA and GSACA_LA+SA: [link](https://github.com/felipelouza/sacak-lyndon/tree/master/external/gsaca_cl).
+
+---
+
+<small> Supported by the project Italian MIUR-SIR [CMACBioSeq][240fb5f5] ("_Combinatorial methods for analysis and compression of biological sequences_") grant n.~RBSI146R5L. P.I. Giovanna Rosone</small> [↩](#a1)
+
+[240fb5f5]: http://pages.di.unipi.it/rosone/CMACBioSeq.html
